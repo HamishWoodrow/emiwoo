@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Environment variables — NEVER commit
+.env
+.env.local
+.env.*
+
+# Build outputs
+build/
+dist/
+.cache/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Vercel
+.vercel/

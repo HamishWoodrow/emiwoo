@@ -1,0 +1,171 @@
+import {useRef, useEffect, useState} from 'react';
+import {Button} from '~/components/ui/Button';
+
+export function HeroSection() {
+  const chevronRef = useRef<HTMLDivElement>(null);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (window.scrollY > 80) {
+        setHasScrolled(true);
+      }
+    };
+    window.addEventListener('scroll', onScroll, {passive: true});
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <section
+      style={{
+        position: 'relative',
+        width: '100%',
+        height: '100svh',
+        overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      {/* Background video */}
+      <div style={{position: 'absolute', inset: 0}}>
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          style={{width: '100%', height: '100%', objectFit: 'cover'}}
+          poster="/images/placeholders/hero-poster.jpg"
+          aria-hidden="true"
+        >
+          <source src="/video/placeholders/hero-loop.mp4" type="video/mp4" />
+        </video>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.4) 100%)',
+          }}
+        />
+      </div>
+
+      {/* Content */}
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '24px',
+          padding: '0 24px',
+          animation: 'fadeUp 1.4s cubic-bezier(0.16,1,0.3,1) 0.4s both',
+        }}
+      >
+        <span
+          style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '9px',
+            fontWeight: 400,
+            letterSpacing: '0.32em',
+            textTransform: 'uppercase',
+            color: 'var(--color-accent)',
+          }}
+        >
+          Introducing
+        </span>
+
+        <h1
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(52px, 9vw, 120px)',
+            fontWeight: 300,
+            letterSpacing: '0.14em',
+            color: 'var(--color-text-primary)',
+            lineHeight: 0.9,
+            textTransform: 'uppercase',
+          }}
+        >
+          Emi Woo
+        </h1>
+
+        <p
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(16px, 2.5vw, 22px)',
+            fontWeight: 300,
+            fontStyle: 'italic',
+            letterSpacing: '0.06em',
+            color: 'rgba(245,240,235,0.7)',
+            marginTop: '4px',
+          }}
+        >
+          The Silk Blouse
+        </p>
+
+        <div style={{marginTop: '20px'}}>
+          <Button to="/products/silk-blouse">Shop Now</Button>
+        </div>
+      </div>
+
+      {/* Scroll chevron */}
+      <div
+        ref={chevronRef}
+        style={{
+          position: 'absolute',
+          bottom: '40px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 10,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '8px',
+          transition: 'opacity 0.6s',
+          opacity: hasScrolled ? 0 : 1,
+          pointerEvents: 'none',
+        }}
+      >
+        <span
+          style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '8px',
+            fontWeight: 400,
+            letterSpacing: '0.3em',
+            textTransform: 'uppercase',
+            color: 'rgba(245,240,235,0.4)',
+          }}
+        >
+          Scroll
+        </span>
+        <svg
+          width="16"
+          height="24"
+          viewBox="0 0 16 24"
+          fill="none"
+          style={{animation: 'scrollBounce 2s ease-in-out infinite'}}
+        >
+          <path
+            d="M8 0v20M1 13l7 7 7-7"
+            stroke="rgba(245,240,235,0.3)"
+            strokeWidth="1"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
+
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes scrollBounce {
+          0%, 100% { transform: translateY(0); }
+          50%       { transform: translateY(6px); }
+        }
+      `}</style>
+    </section>
+  );
+}

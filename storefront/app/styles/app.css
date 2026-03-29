@@ -1,0 +1,253 @@
+@import "tailwindcss";
+
+/* =========================================
+   EMI WOO — DESIGN SYSTEM
+   ========================================= */
+
+:root {
+  --color-bg:               #0a0a0a;
+  --color-surface:          #111111;
+  --color-border:           rgba(255, 255, 255, 0.07);
+  --color-text-primary:     #f5f0eb;
+  --color-text-secondary:   rgba(245, 240, 235, 0.5);
+  --color-accent:           #c9a96e;
+  --color-accent-muted:     rgba(201, 169, 110, 0.15);
+  --font-display:           'Cormorant Garamond', Georgia, serif;
+  --font-body:              'Inter', system-ui, sans-serif;
+  --section-h:              100svh;
+  --container-max:          1320px;
+  --container-pad:          clamp(20px, 5vw, 80px);
+  --ease-luxury:            cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-reveal:            cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Tailwind v4 custom utilities */
+@theme {
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --color-bg: #0a0a0a;
+  --color-surface: #111111;
+  --color-text-primary: #f5f0eb;
+  --color-text-secondary: rgba(245, 240, 235, 0.5);
+  --color-accent: #c9a96e;
+  --color-accent-muted: rgba(201, 169, 110, 0.15);
+  --color-border: rgba(255, 255, 255, 0.07);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+/* =========================================
+   TYPOGRAPHY
+   ========================================= */
+
+.font-display { font-family: var(--font-display); }
+.font-body    { font-family: var(--font-body); }
+
+/* =========================================
+   LAYOUT HELPERS
+   ========================================= */
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+}
+
+.section-full {
+  position: relative;
+  width: 100%;
+  height: var(--section-h);
+  overflow: hidden;
+}
+
+/* =========================================
+   BUTTON — GOLD OUTLINE
+   ========================================= */
+
+.btn-accent {
+  display: inline-block;
+  padding: 14px 40px;
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  background: transparent;
+  transition:
+    background 0.4s var(--ease-luxury),
+    color 0.4s var(--ease-luxury);
+}
+
+.btn-accent:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* =========================================
+   GOLD DECORATIVE RULE
+   ========================================= */
+
+.gold-rule {
+  display: block;
+  width: 48px;
+  height: 1px;
+  background: var(--color-accent);
+}
+
+.gold-rule-center {
+  margin: 0 auto;
+}
+
+/* =========================================
+   PARALLAX SECTION BASE
+   ========================================= */
+
+.parallax-section {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.parallax-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.parallax-bg img,
+.parallax-bg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.parallax-overlay {
+  position: absolute;
+  inset: 0;
+  background: black;
+}
+
+.parallax-content {
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 0 var(--container-pad);
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.5s var(--ease-luxury), backdrop-filter 0.5s;
+}
+
+.site-header.scrolled {
+  background: rgba(10, 10, 10, 0.9);
+  backdrop-filter: blur(12px);
+}
+
+.site-header.hidden {
+  transform: translateY(-100%);
+}
+
+/* =========================================
+   PRESS / TRUST
+   ========================================= */
+
+.press-section {
+  background: var(--color-surface);
+  padding: 80px var(--container-pad);
+  text-align: center;
+}
+
+/* =========================================
+   NEWSLETTER
+   ========================================= */
+
+.newsletter-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  padding: 12px 0;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.3s;
+}
+
+.newsletter-input::placeholder {
+  color: var(--color-text-secondary);
+  letter-spacing: 0.12em;
+}
+
+.newsletter-input:focus {
+  border-color: var(--color-accent);
+}
+
+/* =========================================
+   UTILS
+   ========================================= */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.text-balance { text-wrap: balance; }

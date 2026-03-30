@@ -14,11 +14,6 @@ import {Header} from '~/components/layout/Header';
 import {Footer} from '~/components/layout/Footer';
 import {SmoothScroll} from '~/components/ui/SmoothScroll';
 
-export const meta: Route.MetaFunction = () => [
-  {charSet: 'utf-8'},
-  {name: 'viewport', content: 'width=device-width,initial-scale=1'},
-];
-
 export function links() {
   return [
     {rel: 'preconnect', href: 'https://fonts.googleapis.com'},
@@ -37,17 +32,25 @@ export function links() {
 }
 
 export async function loader({request}: Route.LoaderArgs) {
-  return {url: request.url};
+  return {
+    url: request.url,
+    /** UTC year so SSR and client agree (avoids rare boundary timezone drift). */
+    year: new Date().getUTCFullYear(),
+  };
 }
 
 export function Layout({children}: {children?: React.ReactNode}) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Must be real DOM nodes; Route meta descriptors for charset/viewport were
+            not present in SSR HTML while the client rendered them — hydration #418. */}
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {children}
         <ScrollRestoration />
         <Scripts />

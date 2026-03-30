@@ -1,4 +1,4 @@
-import {Link} from 'react-router';
+import {Link, useRouteLoaderData} from 'react-router';
 
 const SOCIAL_LINKS = [
   {label: 'Instagram', href: 'https://instagram.com/emiwoo'},
@@ -23,7 +23,12 @@ const LEGAL_LINKS = [
   {href: '#', label: 'Shipping & Returns'},
 ];
 
+type RootLoaderData = {year?: number};
+
 export function Footer() {
+  const rootData = useRouteLoaderData('root') as RootLoaderData | undefined;
+  const year = rootData?.year ?? new Date().getUTCFullYear();
+
   return (
     <footer
       style={{
@@ -159,7 +164,7 @@ export function Footer() {
           style={{color: 'var(--color-text-secondary)'}}
         >
           <p style={{fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 300, letterSpacing: '0.06em'}}>
-            © {new Date().getFullYear()} Emi Woo. All rights reserved.
+            © {year} Emi Woo. All rights reserved.
           </p>
           <div className="flex gap-6">
             {LEGAL_LINKS.map(({href, label}) => (

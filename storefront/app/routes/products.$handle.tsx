@@ -4,10 +4,10 @@ import {
   getAdjacentAndFirstAvailableVariants,
   getProductOptions,
   getSelectedProductOptions,
+  Money,
   useOptimisticVariant,
   useSelectedOptionInUrlParam,
 } from '@shopify/hydrogen';
-import {Money} from '@shopify/hydrogen-react';
 import {Button} from '~/components/ui/Button';
 import {ParallaxSection} from '~/components/ui/ParallaxSection';
 import {ProductForm} from '~/components/ProductForm';

@@ -3,6 +3,7 @@
   "private": true,
   "sideEffects": false,
   "version": "1.0.0",
+  "packageManager": "pnpm@10.33.0",
   "type": "module",
   "scripts": {
     "build": "react-router build",
@@ -53,6 +54,6 @@
     "vite-tsconfig-paths": "^4.3.1"
   },
   "engines": {
-    "node": "^22 || ^24"
+    "node": ">=22.0.0"
   }
 }

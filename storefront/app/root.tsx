@@ -109,7 +109,6 @@ export function ErrorBoundary() {
         <p style={{color: '#8b6835', letterSpacing: '0.15em', fontSize: '0.85rem', textTransform: 'uppercase'}}>
           {errorMessage}
         </p>
-        <Scripts />
       </body>
     </html>
   );

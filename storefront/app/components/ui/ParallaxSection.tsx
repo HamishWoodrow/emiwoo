@@ -80,7 +80,12 @@ export function ParallaxSection({
             aria-hidden="true"
           />
         ) : image ? (
-          <img src={image} alt="" aria-hidden="true" loading="lazy" />
+          <img
+            src={image}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+          />
         ) : (
           /* Solid colour fallback */
           <div style={{background: '#111', width: '100%', height: '100%'}} />

@@ -45,17 +45,17 @@ export function NewsletterSection() {
       ref={sectionRef}
       style={{
         background: 'var(--color-bg)',
-        padding: 'clamp(80px, 10vw, 140px) var(--container-pad)',
+        padding: 'clamp(56px, 7vw, 96px) var(--container-pad)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '48px',
+        gap: '32px',
       }}
     >
       {/* Top rule */}
       <div
         className="fade-in"
-        style={{width: '1px', height: '60px', background: 'var(--color-border)'}}
+        style={{width: '1px', height: '40px', background: 'var(--color-border)'}}
       />
 
       {submitted ? (
@@ -171,7 +171,7 @@ export function NewsletterSection() {
       {/* Bottom rule */}
       <div
         className="fade-in"
-        style={{width: '1px', height: '60px', background: 'var(--color-border)'}}
+        style={{width: '1px', height: '40px', background: 'var(--color-border)'}}
       />
       <style>{`
         @keyframes fadeUp {

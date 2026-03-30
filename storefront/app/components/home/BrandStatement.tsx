@@ -45,18 +45,18 @@ export function BrandStatement() {
       ref={sectionRef}
       style={{
         background: 'var(--color-bg)',
-        padding: 'clamp(100px, 14vw, 180px) var(--container-pad)',
+        padding: 'clamp(72px, 9vw, 120px) var(--container-pad)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '48px',
+        gap: '32px',
       }}
     >
       {/* Top rule */}
       <div
         style={{
           width: '1px',
-          height: '60px',
+          height: '40px',
           background: 'var(--color-accent)',
           opacity: 0.5,
         }}
@@ -119,7 +119,7 @@ export function BrandStatement() {
       <div
         style={{
           width: '1px',
-          height: '60px',
+          height: '40px',
           background: 'var(--color-accent)',
           opacity: 0.5,
         }}

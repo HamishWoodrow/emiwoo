@@ -131,7 +131,7 @@ export function HeroSection() {
         </p>
 
         <div style={{marginTop: '20px'}}>
-          <Button to="/products/silk-blouse" variant="light">Shop Now</Button>
+          <Button to="/intent" variant="light">Discover our intent</Button>
         </div>
       </div>
 

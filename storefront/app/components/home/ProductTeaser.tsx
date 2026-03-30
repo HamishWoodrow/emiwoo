@@ -38,7 +38,7 @@ export function ProductTeaser() {
       style={{
         position: 'relative',
         width: '100%',
-        height: '100svh',
+        height: 'clamp(480px, 80vh, 860px)',
         overflow: 'hidden',
         display: 'flex',
         alignItems: 'center',

@@ -56,7 +56,7 @@ export function PressSection() {
       ref={sectionRef}
       style={{
         background: 'var(--color-surface)',
-        padding: 'clamp(80px, 10vw, 140px) var(--container-pad)',
+        padding: 'clamp(56px, 7vw, 96px) var(--container-pad)',
       }}
     >
       <div className="container">
@@ -64,7 +64,7 @@ export function PressSection() {
         <div
           style={{
             textAlign: 'center',
-            marginBottom: '64px',
+            marginBottom: '40px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',

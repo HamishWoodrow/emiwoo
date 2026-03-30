@@ -1,8 +1,11 @@
 import {useRef, useEffect, useState} from 'react';
+import {useGSAP} from '@gsap/react';
+import {gsap} from '~/lib/animations';
 import {Button} from '~/components/ui/Button';
 
 export function HeroSection() {
-  const chevronRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
@@ -15,8 +18,28 @@ export function HeroSection() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // GSAP-driven entrance: runs on client only, no SSR flash
+  useGSAP(
+    () => {
+      if (!contentRef.current) return;
+      gsap.fromTo(
+        contentRef.current,
+        {opacity: 0, y: 32},
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.4,
+          delay: 0.3,
+          ease: 'power3.out',
+        },
+      );
+    },
+    {scope: sectionRef},
+  );
+
   return (
     <section
+      ref={sectionRef}
       style={{
         position: 'relative',
         width: '100%',
@@ -44,13 +67,15 @@ export function HeroSection() {
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.4) 100%)',
+            background:
+              'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.4) 100%)',
           }}
         />
       </div>
 
-      {/* Content */}
+      {/* Content — starts invisible; GSAP reveals on mount */}
       <div
+        ref={contentRef}
         style={{
           position: 'relative',
           zIndex: 10,
@@ -60,7 +85,7 @@ export function HeroSection() {
           alignItems: 'center',
           gap: '24px',
           padding: '0 24px',
-          animation: 'fadeUp 1.4s cubic-bezier(0.16,1,0.3,1) 0.4s both',
+          opacity: 0, // SSR-safe: GSAP overwrites to 1 on mount
         }}
       >
         <span
@@ -111,7 +136,6 @@ export function HeroSection() {
 
       {/* Scroll chevron */}
       <div
-        ref={chevronRef}
         style={{
           position: 'absolute',
           bottom: '40px',
@@ -157,10 +181,6 @@ export function HeroSection() {
       </div>
 
       <style>{`
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
         @keyframes scrollBounce {
           0%, 100% { transform: translateY(0); }
           50%       { transform: translateY(6px); }

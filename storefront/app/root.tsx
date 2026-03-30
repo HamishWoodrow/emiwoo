@@ -12,6 +12,7 @@ import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
 import {Header} from '~/components/layout/Header';
 import {Footer} from '~/components/layout/Footer';
+import {SmoothScroll} from '~/components/ui/SmoothScroll';
 
 export const meta: Route.MetaFunction = () => [
   {charSet: 'utf-8'},
@@ -58,6 +59,7 @@ export function Layout({children}: {children?: React.ReactNode}) {
 export default function App() {
   return (
     <>
+      <SmoothScroll />
       <Header />
       <main>
         <Outlet />

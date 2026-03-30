@@ -85,6 +85,7 @@ export function BrandStatement() {
                   color: 'var(--color-text-primary)',
                   marginRight: '0.28em',
                   willChange: 'transform, opacity',
+                  opacity: 0, // SSR-safe: GSAP animates this to 1 on scroll
                 }}
               >
                 {word}

@@ -15,4 +15,9 @@ export default defineConfig({
   build: {
     assetsInlineLimit: 0,
   },
+  // GSAP ships ESM entrypoints; Vercel's function runtime was loading them as CJS from node_modules.
+  // Bundling them into the SSR output avoids "Cannot use import statement outside a module".
+  ssr: {
+    noExternal: ['gsap', '@gsap/react'],
+  },
 });

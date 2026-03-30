@@ -91,8 +91,8 @@ export function ErrorBoundary() {
       </head>
       <body
         style={{
-          background: '#0a0a0a',
-          color: '#f5f0eb',
+          background: '#f4ede4',
+          color: '#1a1611',
           fontFamily: 'system-ui, sans-serif',
           display: 'flex',
           flexDirection: 'column',
@@ -106,7 +106,7 @@ export function ErrorBoundary() {
         <h1 style={{fontFamily: 'serif', fontSize: '4rem', margin: 0}}>
           {errorStatus}
         </h1>
-        <p style={{color: '#c9a96e', letterSpacing: '0.15em', fontSize: '0.85rem', textTransform: 'uppercase'}}>
+        <p style={{color: '#8b6835', letterSpacing: '0.15em', fontSize: '0.85rem', textTransform: 'uppercase'}}>
           {errorMessage}
         </p>
         <Scripts />

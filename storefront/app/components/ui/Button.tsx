@@ -7,12 +7,14 @@ interface ButtonProps {
   onClick?: () => void;
   type?: 'button' | 'submit';
   className?: string;
-  variant?: 'accent' | 'ghost';
+  /** accent = dark gold on beige (default); light = cream on dark image backgrounds */
+  variant?: 'accent' | 'light' | 'ghost';
 }
 
 /**
- * Gold outlined CTA button — the signature Emi Woo button.
- * Pass `to` for internal React Router links, `href` for external.
+ * CTA button with two variants:
+ *  - accent (default): dark gold border/text — for beige/cream backgrounds
+ *  - light: cream border/text — for use over dark image/video backgrounds
  */
 export function Button({
   children,
@@ -23,7 +25,9 @@ export function Button({
   className = '',
   variant = 'accent',
 }: ButtonProps) {
-  const cls = `btn-accent ${variant === 'ghost' ? 'opacity-60 hover:opacity-100' : ''} ${className}`;
+  const baseClass =
+    variant === 'light' ? 'btn-accent-light' : 'btn-accent';
+  const cls = `${baseClass} ${variant === 'ghost' ? 'opacity-60 hover:opacity-100' : ''} ${className}`;
 
   if (to) {
     return (

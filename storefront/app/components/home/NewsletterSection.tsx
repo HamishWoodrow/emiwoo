@@ -133,7 +133,7 @@ export function NewsletterSection() {
               gap: '0',
               width: '100%',
               maxWidth: '480px',
-              borderBottom: '1px solid rgba(255,255,255,0.12)',
+              borderBottom: '1px solid var(--color-border)',
             }}
           >
             <input

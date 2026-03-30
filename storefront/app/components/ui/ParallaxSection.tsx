@@ -40,16 +40,24 @@ export function ParallaxSection({
       const isMobile = window.matchMedia('(max-width: 768px)').matches;
       const travel = isMobile ? yOffset * 0.5 : yOffset;
 
-      gsap.to(textRef.current, {
-        y: -travel,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: true,
+      // fromTo with explicit y:0 prevents text sitting at wrong position
+      // before the trigger fires. invalidateOnRefresh recalculates positions
+      // after Lenis initialises (fixes ghost/double-text artefact).
+      gsap.fromTo(
+        textRef.current,
+        {y: 0},
+        {
+          y: -travel,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
         },
-      });
+      );
     },
     {scope: sectionRef, dependencies: [yOffset]},
   );
@@ -72,7 +80,7 @@ export function ParallaxSection({
             aria-hidden="true"
           />
         ) : image ? (
-          <img src={image} alt="" aria-hidden="true" />
+          <img src={image} alt="" aria-hidden="true" loading="lazy" />
         ) : (
           /* Solid colour fallback */
           <div style={{background: '#111', width: '100%', height: '100%'}} />

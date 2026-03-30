@@ -88,6 +88,7 @@ export function HeroSection() {
           opacity: 0, // SSR-safe: GSAP overwrites to 1 on mount
         }}
       >
+        {/* All hero text is hardcoded cream — it's always on a dark video */}
         <span
           style={{
             fontFamily: 'var(--font-body)',
@@ -95,7 +96,7 @@ export function HeroSection() {
             fontWeight: 400,
             letterSpacing: '0.32em',
             textTransform: 'uppercase',
-            color: 'var(--color-accent)',
+            color: 'rgba(244,237,228,0.6)',
           }}
         >
           Introducing
@@ -107,7 +108,7 @@ export function HeroSection() {
             fontSize: 'clamp(52px, 9vw, 120px)',
             fontWeight: 300,
             letterSpacing: '0.14em',
-            color: 'var(--color-text-primary)',
+            color: '#f4ede4',
             lineHeight: 0.9,
             textTransform: 'uppercase',
           }}
@@ -122,7 +123,7 @@ export function HeroSection() {
             fontWeight: 300,
             fontStyle: 'italic',
             letterSpacing: '0.06em',
-            color: 'rgba(245,240,235,0.7)',
+            color: 'rgba(244,237,228,0.65)',
             marginTop: '4px',
           }}
         >
@@ -130,7 +131,7 @@ export function HeroSection() {
         </p>
 
         <div style={{marginTop: '20px'}}>
-          <Button to="/products/silk-blouse">Shop Now</Button>
+          <Button to="/products/silk-blouse" variant="light">Shop Now</Button>
         </div>
       </div>
 

@@ -57,7 +57,7 @@ export function ProductTeaser() {
             position: 'absolute',
             inset: 0,
             background:
-              'linear-gradient(to top, rgba(10,10,10,0.7) 0%, rgba(10,10,10,0.2) 60%, rgba(10,10,10,0.1) 100%)',
+              'linear-gradient(to top, rgba(26,22,17,0.75) 0%, rgba(26,22,17,0.25) 60%, rgba(26,22,17,0.05) 100%)',
           }}
         />
       </div>
@@ -86,7 +86,7 @@ export function ProductTeaser() {
             fontWeight: 400,
             letterSpacing: '0.3em',
             textTransform: 'uppercase',
-            color: 'var(--color-accent)',
+            color: 'rgba(244,237,228,0.6)',  /* hardcoded: always on dark image */
           }}
         >
           The Blouse
@@ -98,7 +98,7 @@ export function ProductTeaser() {
             fontSize: 'clamp(32px, 5vw, 56px)',
             fontWeight: 300,
             letterSpacing: '0.06em',
-            color: 'var(--color-text-primary)',
+            color: '#f4ede4',  /* hardcoded cream: always on dark image */
             lineHeight: 1.1,
           }}
         >
@@ -111,7 +111,7 @@ export function ProductTeaser() {
             fontSize: 'clamp(15px, 1.8vw, 18px)',
             fontWeight: 300,
             fontStyle: 'italic',
-            color: 'rgba(245,240,235,0.65)',
+            color: 'rgba(244,237,228,0.65)',
             letterSpacing: '0.04em',
           }}
         >
@@ -119,7 +119,7 @@ export function ProductTeaser() {
         </p>
 
         <div style={{marginTop: '8px'}}>
-          <Button to="/products/silk-blouse">View the Blouse</Button>
+          <Button to="/products/silk-blouse" variant="light">View the Blouse</Button>
         </div>
       </div>
     </section>

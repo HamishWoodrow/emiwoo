@@ -321,7 +321,7 @@ export default function ProductPage() {
                 fontSize: 'clamp(13px, 1.4vw, 15px)',
                 fontWeight: 300,
                 lineHeight: 1.85,
-                color: 'rgba(245,240,235,0.72)',
+                color: 'rgba(244,237,228,0.72)',
                 maxWidth: '400px',
               }}
             >

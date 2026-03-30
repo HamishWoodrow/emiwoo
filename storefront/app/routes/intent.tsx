@@ -135,7 +135,7 @@ export default function Intent() {
               position: 'absolute',
               inset: 0,
               background:
-                'linear-gradient(to top, rgba(10,10,10,0.8) 0%, rgba(10,10,10,0.3) 60%)',
+                'linear-gradient(to top, rgba(26,22,17,0.82) 0%, rgba(26,22,17,0.35) 60%)',
             }}
           />
         </div>

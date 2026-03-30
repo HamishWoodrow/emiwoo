@@ -145,7 +145,7 @@ export function PressSection() {
                   fontStyle: 'italic',
                   lineHeight: 1.65,
                   letterSpacing: '0.02em',
-                  color: 'rgba(245,240,235,0.7)',
+                  color: 'var(--color-text-secondary)',
                 }}
               >
                 {quote}

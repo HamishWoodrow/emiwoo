@@ -95,8 +95,9 @@ export function BrandStatement() {
         ))}
       </div>
 
-      {/* Sub-copy */}
+      {/* Sub-copy — initially hidden, fades in with words */}
       <p
+        className="reveal-word"
         style={{
           fontFamily: 'var(--font-body)',
           fontSize: 'clamp(12px, 1.4vw, 14px)',
@@ -107,6 +108,7 @@ export function BrandStatement() {
           maxWidth: '400px',
           textAlign: 'center',
           lineHeight: 1.9,
+          opacity: 0,
         }}
       >
         Not a collection. Not a capsule.<br />

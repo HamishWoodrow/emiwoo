@@ -8,10 +8,16 @@ const NAV_LINKS = [
   {to: '/contact', label: 'Contact'},
 ];
 
+/**
+ * Transparent over hero/dark sections; frosted-beige when scrolled.
+ * Text colour flips between cream (over hero) and dark-brown (over beige).
+ */
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  // isOverDark = true while the header is visually over a dark section (hero/parallax)
+  const [isOverDark, setIsOverDark] = useState(true);
   const lastScrollY = useRef(0);
   const location = useLocation();
 
@@ -20,16 +26,40 @@ export function Header() {
   }, [location.pathname]);
 
   useEffect(() => {
+    // On non-homepage routes, the hero doesn't exist — always use dark text
+    const isHome = location.pathname === '/';
+
     const onScroll = () => {
       const y = window.scrollY;
+      const vh = window.innerHeight;
+
       setScrolled(y > 60);
       setHidden(y > lastScrollY.current && y > 200);
       lastScrollY.current = y;
+
+      if (isHome) {
+        // Hero is 100svh; brand statement follows (also dark bg).
+        // Switch to dark text after first two sections (~200vh).
+        // But parallax story beats also have dark overlays, so stay light
+        // until the press section (around 500vh on desktop).
+        // Simpler rule: light text until 85% through the hero section.
+        setIsOverDark(y < vh * 0.85);
+      } else {
+        setIsOverDark(false);
+      }
     };
 
+    // Set initial state
+    onScroll();
     window.addEventListener('scroll', onScroll, {passive: true});
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [location.pathname]);
+
+  const logoColor = isOverDark && !scrolled ? '#f4ede4' : 'var(--color-text-primary)';
+  const logoSubColor = isOverDark && !scrolled ? 'rgba(244,237,228,0.6)' : 'var(--color-accent)';
+  const navColor = isOverDark && !scrolled ? 'rgba(244,237,228,0.7)' : 'var(--color-text-secondary)';
+  const navActiveColor = isOverDark && !scrolled ? '#f4ede4' : 'var(--color-accent)';
+  const burgerColor = isOverDark && !scrolled ? '#f4ede4' : 'var(--color-text-primary)';
 
   return (
     <>
@@ -43,6 +73,7 @@ export function Header() {
           to="/"
           className="flex flex-col items-start gap-0.5 no-underline"
           aria-label="Emi Woo — Home"
+          style={{transition: 'color 0.4s'}}
         >
           <span
             style={{
@@ -50,8 +81,9 @@ export function Header() {
               fontSize: '20px',
               fontWeight: 300,
               letterSpacing: '0.18em',
-              color: 'var(--color-text-primary)',
+              color: logoColor,
               lineHeight: 1,
+              transition: 'color 0.4s',
             }}
           >
             EMI WOO
@@ -62,9 +94,10 @@ export function Header() {
               fontSize: '8px',
               fontWeight: 400,
               letterSpacing: '0.28em',
-              color: 'var(--color-accent)',
+              color: logoSubColor,
               textTransform: 'uppercase',
               lineHeight: 1,
+              transition: 'color 0.4s',
             }}
           >
             The Silk Blouse
@@ -83,23 +116,10 @@ export function Header() {
                 fontWeight: 400,
                 letterSpacing: '0.2em',
                 textTransform: 'uppercase',
-                color:
-                  location.pathname === to
-                    ? 'var(--color-accent)'
-                    : 'var(--color-text-secondary)',
+                color: location.pathname === to ? navActiveColor : navColor,
                 textDecoration: 'none',
                 transition: 'color 0.3s',
               }}
-              onMouseEnter={(e) =>
-                ((e.target as HTMLElement).style.color =
-                  'var(--color-text-primary)')
-              }
-              onMouseLeave={(e) =>
-                ((e.target as HTMLElement).style.color =
-                  location.pathname === to
-                    ? 'var(--color-accent)'
-                    : 'var(--color-text-secondary)')
-              }
             >
               {label}
             </Link>
@@ -109,7 +129,7 @@ export function Header() {
         {/* Shop CTA */}
         <Link
           to="/products/silk-blouse"
-          className="btn-accent hidden md:inline-block"
+          className={isOverDark && !scrolled ? 'btn-accent-light' : 'btn-accent'}
           style={{fontSize: '9px', padding: '10px 24px'}}
         >
           Shop
@@ -122,36 +142,24 @@ export function Header() {
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           style={{background: 'none', border: 'none', cursor: 'pointer'}}
         >
-          <span
-            style={{
-              display: 'block',
-              width: '22px',
-              height: '1px',
-              background: 'var(--color-text-primary)',
-              transition: 'transform 0.3s, opacity 0.3s',
-              transform: menuOpen ? 'translateY(5px) rotate(45deg)' : 'none',
-            }}
-          />
-          <span
-            style={{
-              display: 'block',
-              width: '22px',
-              height: '1px',
-              background: 'var(--color-text-primary)',
-              transition: 'opacity 0.3s',
-              opacity: menuOpen ? 0 : 1,
-            }}
-          />
-          <span
-            style={{
-              display: 'block',
-              width: '22px',
-              height: '1px',
-              background: 'var(--color-text-primary)',
-              transition: 'transform 0.3s, opacity 0.3s',
-              transform: menuOpen ? 'translateY(-5px) rotate(-45deg)' : 'none',
-            }}
-          />
+          {[
+            menuOpen ? 'translateY(5px) rotate(45deg)' : 'none',
+            'none',
+            menuOpen ? 'translateY(-5px) rotate(-45deg)' : 'none',
+          ].map((transform, i) => (
+            <span
+              key={i}
+              style={{
+                display: 'block',
+                width: '22px',
+                height: '1px',
+                background: burgerColor,
+                transition: 'transform 0.3s, opacity 0.3s, background 0.4s',
+                transform,
+                opacity: i === 1 && menuOpen ? 0 : 1,
+              }}
+            />
+          ))}
         </button>
       </header>
 

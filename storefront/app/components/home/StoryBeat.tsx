@@ -92,7 +92,7 @@ export function StoryBeat({
             }}
           />
 
-          {/* Body */}
+          {/* Body — always cream: text lives over dark image overlay */}
           <p
             style={{
               fontFamily: 'var(--font-body)',
@@ -100,7 +100,7 @@ export function StoryBeat({
               fontWeight: 300,
               lineHeight: 1.8,
               letterSpacing: '0.04em',
-              color: 'rgba(245,240,235,0.72)',
+              color: 'rgba(244,237,228,0.75)',
               maxWidth: '400px',
               ...(isCenter ? {margin: '0 auto'} : {}),
             }}

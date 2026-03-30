@@ -1,21 +1,29 @@
 import {
   Outlet,
-  useRouteError,
+  Scripts,
+  ScrollRestoration,
   isRouteErrorResponse,
   Links,
   Meta,
-  Scripts,
-  ScrollRestoration,
+  useLoaderData,
+  useRouteError,
 } from 'react-router';
 import type {Route} from './+types/root';
 import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
+import {Aside} from '~/components/Aside';
+import {CartMain} from '~/components/CartMain';
 import {Header} from '~/components/layout/Header';
 import {Footer} from '~/components/layout/Footer';
 import {SmoothScroll} from '~/components/ui/SmoothScroll';
 
 export function links() {
   return [
+    {
+      rel: 'icon',
+      type: 'image/png',
+      href: '/favicon.png',
+    },
     {rel: 'preconnect', href: 'https://fonts.googleapis.com'},
     {
       rel: 'preconnect',
@@ -31,8 +39,10 @@ export function links() {
   ];
 }
 
-export async function loader({request}: Route.LoaderArgs) {
+export async function loader({request, context}: Route.LoaderArgs) {
+  const cart = await context.cart.get();
   return {
+    cart: cart ?? null,
     url: request.url,
     /** UTC year so SSR and client agree (avoids rare boundary timezone drift). */
     year: new Date().getUTCFullYear(),
@@ -59,16 +69,26 @@ export function Layout({children}: {children?: React.ReactNode}) {
   );
 }
 
+function CartAsideRoute() {
+  const {cart} = useLoaderData<typeof loader>();
+  return (
+    <Aside type="cart" heading="Cart">
+      <CartMain cart={cart} layout="aside" />
+    </Aside>
+  );
+}
+
 export default function App() {
   return (
-    <>
+    <Aside.Provider>
+      <CartAsideRoute />
       <SmoothScroll />
       <Header />
       <main>
         <Outlet />
       </main>
       <Footer />
-    </>
+    </Aside.Provider>
   );
 }
 
@@ -94,7 +114,7 @@ export function ErrorBoundary() {
       </head>
       <body
         style={{
-          background: '#f4ede4',
+          background: '#EAE3C9',
           color: '#1a1611',
           fontFamily: 'system-ui, sans-serif',
           display: 'flex',
@@ -109,7 +129,7 @@ export function ErrorBoundary() {
         <h1 style={{fontFamily: 'serif', fontSize: '4rem', margin: 0}}>
           {errorStatus}
         </h1>
-        <p style={{color: '#8b6835', letterSpacing: '0.15em', fontSize: '0.85rem', textTransform: 'uppercase'}}>
+        <p style={{color: '#73889C', letterSpacing: '0.15em', fontSize: '0.85rem', textTransform: 'uppercase'}}>
           {errorMessage}
         </p>
       </body>

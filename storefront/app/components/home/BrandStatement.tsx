@@ -1,14 +1,10 @@
 import {useRef} from 'react';
 import {useGSAP} from '@gsap/react';
 import {gsap, ScrollTrigger} from '~/lib/animations';
+import {BRAND_STATEMENT_LINES} from '~/content/home';
+import {prefersReducedMotion} from '~/lib/motion';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const STATEMENT_LINES = [
-  'One blouse.',
-  'Designed without',
-  'compromise.',
-];
 
 export function BrandStatement() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -17,6 +13,12 @@ export function BrandStatement() {
   useGSAP(
     () => {
       if (!sectionRef.current || !linesRef.current) return;
+      if (prefersReducedMotion()) {
+        const words =
+          linesRef.current.querySelectorAll<HTMLSpanElement>('.reveal-word');
+        gsap.set(words, {opacity: 1, y: 0});
+        return;
+      }
 
       const words = linesRef.current.querySelectorAll<HTMLSpanElement>('.reveal-word');
 
@@ -43,6 +45,7 @@ export function BrandStatement() {
   return (
     <section
       ref={sectionRef}
+      data-header-theme="light"
       style={{
         background: 'var(--color-bg)',
         padding: 'clamp(72px, 9vw, 120px) var(--container-pad)',
@@ -64,12 +67,13 @@ export function BrandStatement() {
 
       {/* Statement text */}
       <div ref={linesRef} style={{textAlign: 'center'}}>
-        {STATEMENT_LINES.map((line, li) => (
+        {BRAND_STATEMENT_LINES.map((line, li) => (
           <div
             key={li}
             style={{
               lineHeight: 1.05,
-              marginBottom: li < STATEMENT_LINES.length - 1 ? '0.12em' : 0,
+              marginBottom:
+                li < BRAND_STATEMENT_LINES.length - 1 ? '0.12em' : 0,
             }}
           >
             {line.split(' ').map((word, wi) => (

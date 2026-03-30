@@ -43,6 +43,7 @@ export function NewsletterSection() {
   return (
     <section
       ref={sectionRef}
+      data-header-theme="light"
       style={{
         background: 'var(--color-bg)',
         padding: 'clamp(56px, 7vw, 96px) var(--container-pad)',

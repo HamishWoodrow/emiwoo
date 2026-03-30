@@ -44,17 +44,13 @@ export function Footer() {
           {/* Brand */}
           <div className="flex flex-col gap-4 max-w-xs">
             <Link to="/" style={{textDecoration: 'none'}}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '24px',
-                  fontWeight: 300,
-                  letterSpacing: '0.18em',
-                  color: 'var(--color-text-primary)',
-                }}
-              >
-                EMI WOO
-              </span>
+              <img
+                src="/images/brand/logo-wordmark-gold.png"
+                alt="Emi Woo"
+                width={160}
+                height={42}
+                style={{height: '36px', width: 'auto', filter: 'brightness(0.32)'}}
+              />
             </Link>
             <p
               style={{
@@ -80,7 +76,7 @@ export function Footer() {
                   fontWeight: 400,
                   letterSpacing: '0.22em',
                   textTransform: 'uppercase',
-                  color: 'var(--color-accent)',
+                  color: 'var(--color-cta)',
                   marginBottom: '8px',
                 }}
               >
@@ -121,7 +117,7 @@ export function Footer() {
                   fontWeight: 400,
                   letterSpacing: '0.22em',
                   textTransform: 'uppercase',
-                  color: 'var(--color-accent)',
+                  color: 'var(--color-cta)',
                   marginBottom: '8px',
                 }}
               >

@@ -7,6 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 // The hydrogen() Vite plugin configures the SSR bundle for the Cloudflare Workers runtime,
 // which is incompatible with Vercel. It is re-added in Phase 2 only if switching to Oxygen.
 export default defineConfig({
+  envPrefix: ['VITE_', 'PUBLIC_'],
   plugins: [
     tailwindcss(),
     reactRouter(),

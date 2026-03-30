@@ -9,14 +9,13 @@ const NAV_LINKS = [
 ];
 
 /**
- * Transparent over hero/dark sections; frosted-beige when scrolled.
- * Text colour flips between cream (over hero) and dark-brown (over beige).
+ * Transparent over dark sections; frosted page background when scrolled.
+ * Uses IntersectionObserver on [data-header-theme] markers (homepage).
  */
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  // isOverDark = true while the header is visually over a dark section (hero/parallax)
   const [isOverDark, setIsOverDark] = useState(true);
   const lastScrollY = useRef(0);
   const location = useLocation();
@@ -26,40 +25,57 @@ export function Header() {
   }, [location.pathname]);
 
   useEffect(() => {
-    // On non-homepage routes, the hero doesn't exist — always use dark text
-    const isHome = location.pathname === '/';
-
     const onScroll = () => {
       const y = window.scrollY;
-      const vh = window.innerHeight;
-
       setScrolled(y > 60);
       setHidden(y > lastScrollY.current && y > 200);
       lastScrollY.current = y;
-
-      if (isHome) {
-        // Hero is 100svh; brand statement follows (also dark bg).
-        // Switch to dark text after first two sections (~200vh).
-        // But parallax story beats also have dark overlays, so stay light
-        // until the press section (around 500vh on desktop).
-        // Simpler rule: light text until 85% through the hero section.
-        setIsOverDark(y < vh * 0.85);
-      } else {
-        setIsOverDark(false);
-      }
     };
-
-    // Set initial state
-    onScroll();
     window.addEventListener('scroll', onScroll, {passive: true});
+    onScroll();
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (location.pathname !== '/') {
+      setIsOverDark(false);
+      return;
+    }
+
+    const nodes = document.querySelectorAll<HTMLElement>('[data-header-theme]');
+    if (nodes.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort(
+            (a, b) => a.boundingClientRect.top - b.boundingClientRect.top,
+          );
+        const first = visible[0]?.target as HTMLElement | undefined;
+        const themefirst = first?.dataset.headerTheme;
+        if (themefirst === 'dark' || themefirst === 'light') {
+          setIsOverDark(themefirst === 'dark');
+        }
+      },
+      {
+        root: null,
+        rootMargin: '-64px 0px -55% 0px',
+        threshold: [0, 0.08, 0.15, 0.25],
+      },
+    );
+
+    nodes.forEach((n) => observer.observe(n));
+    return () => observer.disconnect();
   }, [location.pathname]);
 
-  const logoColor = isOverDark && !scrolled ? '#f4ede4' : 'var(--color-text-primary)';
-  const logoSubColor = isOverDark && !scrolled ? 'rgba(244,237,228,0.6)' : 'var(--color-accent)';
-  const navColor = isOverDark && !scrolled ? 'rgba(244,237,228,0.7)' : 'var(--color-text-secondary)';
-  const navActiveColor = isOverDark && !scrolled ? '#f4ede4' : 'var(--color-accent)';
-  const burgerColor = isOverDark && !scrolled ? '#f4ede4' : 'var(--color-text-primary)';
+  const onDark = isOverDark && !scrolled;
+  const logoSubColor = onDark
+    ? 'rgba(244,237,228,0.65)'
+    : 'var(--color-text-secondary)';
+  const navColor = onDark ? 'rgba(244,237,228,0.75)' : 'var(--color-text-secondary)';
+  const navActiveColor = onDark ? '#f4ede4' : 'var(--color-cta)';
+  const burgerColor = onDark ? '#f4ede4' : 'var(--color-text-primary)';
 
   return (
     <>
@@ -68,26 +84,23 @@ export function Header() {
           scrolled ? 'scrolled' : ''
         } ${hidden ? '-translate-y-full' : 'translate-y-0'}`}
       >
-        {/* Logo */}
         <Link
           to="/"
-          className="flex flex-col items-start gap-0.5 no-underline"
+          className="flex flex-col items-start gap-1 no-underline focus-visible:outline-offset-4"
           aria-label="Emi Woo — Home"
-          style={{transition: 'color 0.4s'}}
         >
-          <span
+          <img
+            src="/images/brand/logo-wordmark-gold.png"
+            alt=""
+            width={140}
+            height={36}
             style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '20px',
-              fontWeight: 300,
-              letterSpacing: '0.18em',
-              color: logoColor,
-              lineHeight: 1,
-              transition: 'color 0.4s',
+              height: 'clamp(22px, 3vw, 32px)',
+              width: 'auto',
+              display: 'block',
+              filter: onDark ? 'none' : 'brightness(0.35)',
             }}
-          >
-            EMI WOO
-          </span>
+          />
           <span
             style={{
               fontFamily: 'var(--font-body)',
@@ -104,7 +117,6 @@ export function Header() {
           </span>
         </Link>
 
-        {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-10" aria-label="Main navigation">
           {NAV_LINKS.map(({to, label}) => (
             <Link
@@ -126,20 +138,20 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Shop CTA */}
         <Link
           to="/products/silk-blouse"
-          className={isOverDark && !scrolled ? 'btn-accent-light' : 'btn-accent'}
+          className={onDark ? 'btn-cta-light' : 'btn-cta'}
           style={{fontSize: '9px', padding: '10px 24px'}}
         >
           Shop
         </Link>
 
-        {/* Mobile hamburger */}
         <button
+          type="button"
           onClick={() => setMenuOpen(!menuOpen)}
           className="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8"
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
           style={{background: 'none', border: 'none', cursor: 'pointer'}}
         >
           {[
@@ -163,7 +175,6 @@ export function Header() {
         </button>
       </header>
 
-      {/* Mobile menu overlay */}
       <div
         style={{
           position: 'fixed',
@@ -196,7 +207,7 @@ export function Header() {
             {label}
           </Link>
         ))}
-        <Link to="/products/silk-blouse" className="btn-accent mt-4">
+        <Link to="/products/silk-blouse" className="btn-cta mt-4">
           Shop
         </Link>
       </div>

@@ -3,6 +3,7 @@ import {ParallaxSection} from '~/components/ui/ParallaxSection';
 interface StoryBeatProps {
   image?: string;
   videoUrl?: string;
+  muxPlaybackId?: string;
   eyebrow?: string;
   heading: string;
   body: string;
@@ -19,6 +20,7 @@ interface StoryBeatProps {
 export function StoryBeat({
   image,
   videoUrl,
+  muxPlaybackId,
   eyebrow,
   heading,
   body,
@@ -33,8 +35,10 @@ export function StoryBeat({
     <ParallaxSection
       image={image}
       videoUrl={videoUrl}
+      muxPlaybackId={muxPlaybackId}
       overlay={overlay}
       ariaLabel={`Story Beat ${index}`}
+      headerTheme="dark"
     >
       <div
         className="container"
@@ -77,7 +81,7 @@ export function StoryBeat({
               fontWeight: 300,
               lineHeight: 1.1,
               letterSpacing: '-0.01em',
-              color: 'var(--color-text-primary)',
+              color: '#f4ede4',
             }}
             dangerouslySetInnerHTML={{__html: heading}}
           />

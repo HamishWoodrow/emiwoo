@@ -1,39 +1,49 @@
 @import "tailwindcss";
 
 /* =========================================
-   EMI WOO — DESIGN SYSTEM
-   Palette: warm cream / beige (Oura 2025 direction)
+   EMI WOO — DESIGN SYSTEM (Pantone-led palette)
    ========================================= */
 
 :root {
-  --color-bg:               #f4ede4;   /* warm cream */
-  --color-surface:          #ede6dc;   /* slightly deeper cream */
-  --color-surface-2:        #e5ddd3;   /* card / press bg */
-  --color-border:           rgba(26, 22, 17, 0.1);
-  --color-text-primary:     #1a1611;   /* rich dark brown */
-  --color-text-secondary:   rgba(26, 22, 17, 0.5);
-  --color-accent:           #8b6835;   /* dark gold — readable on cream */
-  --color-accent-muted:     rgba(139, 104, 53, 0.12);
-  --font-display:           'Cormorant Garamond', Georgia, serif;
-  --font-body:              'Inter', system-ui, sans-serif;
-  --section-h:              100svh;
-  --container-max:          1320px;
-  --container-pad:          clamp(20px, 5vw, 80px);
-  --ease-luxury:            cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --ease-reveal:            cubic-bezier(0.16, 1, 0.3, 1);
+  --color-green-detail:     #A9C3B6;
+  --color-green-soft:       #BFCEC2;
+  --color-bg:                 #EAE3C9;
+  --color-surface:            #E7D3A5;
+  --color-surface-2:          #BFCEC2;
+  --color-mauve:              #b794a6;
+  --color-cta:                #73889C;
+  --color-cta-hover:          #5f7388;
+  --color-border:             rgba(26, 22, 17, 0.12);
+  --color-text-primary:       #1a1611;
+  --color-text-secondary:     rgba(26, 22, 17, 0.55);
+  /* Editorial accent for rules / labels (green-detail, not gold UI) */
+  --color-accent:             var(--color-green-detail);
+  --color-accent-muted:       rgba(169, 195, 182, 0.35);
+  --font-display:             'Cormorant Garamond', Georgia, serif;
+  --font-body:                'Inter', system-ui, sans-serif;
+  --section-h:                100svh;
+  --container-max:            1320px;
+  --container-pad:            clamp(20px, 5vw, 80px);
+  --ease-luxury:              cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-reveal:              cubic-bezier(0.16, 1, 0.3, 1);
+  --focus-ring:               2px solid var(--color-cta);
+  --focus-ring-offset:        2px;
 }
 
 /* Tailwind v4 custom utilities */
 @theme {
   --font-display: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'Inter', system-ui, sans-serif;
-  --color-bg: #f4ede4;
-  --color-surface: #ede6dc;
+  --color-bg: #EAE3C9;
+  --color-surface: #E7D3A5;
   --color-text-primary: #1a1611;
-  --color-text-secondary: rgba(26, 22, 17, 0.5);
-  --color-accent: #8b6835;
-  --color-accent-muted: rgba(139, 104, 53, 0.12);
-  --color-border: rgba(26, 22, 17, 0.1);
+  --color-text-secondary: rgba(26, 22, 17, 0.55);
+  --color-accent: #A9C3B6;
+  --color-accent-muted: rgba(169, 195, 182, 0.35);
+  --color-border: rgba(26, 22, 17, 0.12);
+  --color-cta: #73889C;
+  --color-mauve: #b794a6;
+  --color-green-soft: #BFCEC2;
 }
 
 *, *::before, *::after {
@@ -58,6 +68,12 @@ body {
 img {
   max-width: 100%;
   display: block;
+}
+
+/* Focus visibility — WCAG */
+:where(a, button, input, textarea, select, summary):focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
 }
 
 /* Scrollbar */
@@ -90,14 +106,14 @@ img {
 }
 
 /* =========================================
-   BUTTON — GOLD OUTLINE
+   BUTTONS
    ========================================= */
 
 .btn-accent {
   display: inline-block;
   padding: 14px 40px;
   border: 1px solid var(--color-accent);
-  color: var(--color-accent);
+  color: var(--color-text-primary);
   font-family: var(--font-body);
   font-size: 10px;
   font-weight: 400;
@@ -108,12 +124,40 @@ img {
   background: transparent;
   transition:
     background 0.4s var(--ease-luxury),
-    color 0.4s var(--ease-luxury);
+    color 0.4s var(--ease-luxury),
+    border-color 0.4s var(--ease-luxury);
 }
 
 .btn-accent:hover {
   background: var(--color-accent);
-  color: var(--color-bg);
+  color: var(--color-text-primary);
+  border-color: var(--color-accent);
+}
+
+/* Primary CTA — blue-gray */
+.btn-cta {
+  display: inline-block;
+  padding: 14px 40px;
+  border: 1px solid var(--color-cta);
+  color: var(--color-cta);
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  background: transparent;
+  transition:
+    background 0.4s var(--ease-luxury),
+    color 0.4s var(--ease-luxury),
+    border-color 0.4s var(--ease-luxury);
+}
+
+.btn-cta:hover {
+  background: var(--color-cta);
+  color: #f4f4f1;
+  border-color: var(--color-cta);
 }
 
 /* Button on dark (parallax/hero) backgrounds */
@@ -137,13 +181,38 @@ img {
 }
 
 .btn-accent-light:hover {
-  background: rgba(244, 237, 228, 0.15);
+  background: rgba(115, 136, 156, 0.35);
   border-color: rgba(244, 237, 228, 1);
   color: #f4ede4;
 }
 
+.btn-cta-light {
+  display: inline-block;
+  padding: 14px 40px;
+  border: 1px solid rgba(234, 227, 201, 0.85);
+  color: #eae3c9;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  background: rgba(115, 136, 156, 0.25);
+  transition:
+    background 0.4s var(--ease-luxury),
+    color 0.4s var(--ease-luxury),
+    border-color 0.4s var(--ease-luxury);
+}
+
+.btn-cta-light:hover {
+  background: var(--color-cta);
+  color: #f4f4f1;
+  border-color: var(--color-cta);
+}
+
 /* =========================================
-   GOLD DECORATIVE RULE
+   DECORATIVE RULE
    ========================================= */
 
 .gold-rule {
@@ -159,8 +228,6 @@ img {
 
 /* =========================================
    PARALLAX SECTION BASE
-   Note: parallax sections always have dark image overlays,
-   so text inside them stays light (#f4ede4) regardless of page palette.
    ========================================= */
 
 .parallax-section {
@@ -178,10 +245,17 @@ img {
 }
 
 .parallax-bg img,
-.parallax-bg video {
+.parallax-bg video,
+.parallax-bg mux-player {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* mux-player custom element */
+.parallax-bg mux-player {
+  display: block;
+  --media-object-fit: cover;
 }
 
 .parallax-overlay {
@@ -196,7 +270,6 @@ img {
   height: 100%;
   display: flex;
   align-items: center;
-  /* Padding handled by .container inside — don't double-pad on mobile */
   padding: 0;
 }
 
@@ -218,15 +291,13 @@ img {
   transition: background 0.5s var(--ease-luxury), backdrop-filter 0.5s;
 }
 
-/* On beige sections, header picks up the page bg when scrolled */
 .site-header.scrolled {
-  background: rgba(244, 237, 228, 0.92);
+  background: rgba(234, 227, 201, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(26, 22, 17, 0.08);
+  border-bottom: 1px solid var(--color-border);
 }
 
-/* Over hero (dark image) the header is fully transparent */
 .site-header.hero-mode {
   background: transparent;
   border-bottom: none;
@@ -237,7 +308,7 @@ img {
    ========================================= */
 
 .press-section {
-  background: var(--color-surface);
+  background: var(--color-green-soft);
   padding: 80px var(--container-pad);
   text-align: center;
 }
@@ -249,7 +320,7 @@ img {
 .newsletter-input {
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(26, 22, 17, 0.2);
+  border-bottom: 1px solid rgba(26, 22, 17, 0.22);
   color: var(--color-text-primary);
   font-family: var(--font-body);
   font-size: 14px;
@@ -267,7 +338,7 @@ img {
 }
 
 .newsletter-input:focus {
-  border-color: var(--color-accent);
+  border-color: var(--color-cta);
 }
 
 /* =========================================
@@ -287,3 +358,64 @@ img {
 }
 
 .text-balance { text-wrap: balance; }
+
+/* PDP — Hydrogen ProductForm + cart submit */
+.pdp-product-form .product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.pdp-product-form .product-options-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pdp-product-form .product-options-item {
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: var(--color-text-secondary);
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.pdp-product-form .product-options-item:hover {
+  border-color: var(--color-cta);
+  color: var(--color-cta);
+}
+
+.pdp-product-form button[type='submit'] {
+  width: 100%;
+  padding: 14px 40px;
+  border: 1px solid var(--color-cta);
+  color: var(--color-cta);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.4s var(--ease-luxury),
+    color 0.4s var(--ease-luxury);
+}
+
+.pdp-product-form button[type='submit']:hover:not(:disabled) {
+  background: var(--color-cta);
+  color: #f4f4f1;
+}
+
+.pdp-product-form button[type='submit']:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

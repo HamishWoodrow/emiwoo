@@ -7,14 +7,16 @@ interface ButtonProps {
   onClick?: () => void;
   type?: 'button' | 'submit';
   className?: string;
-  /** accent = dark gold on beige (default); light = cream on dark image backgrounds */
-  variant?: 'accent' | 'light' | 'ghost';
+  /**
+   * accent = subtle green-detail outline on beige (secondary)
+   * cta = primary blue-gray CTA (Pantone)
+   * light / cta-light = on dark hero/parallax
+   */
+  variant?: 'accent' | 'cta' | 'light' | 'cta-light' | 'ghost';
 }
 
 /**
- * CTA button with two variants:
- *  - accent (default): dark gold border/text — for beige/cream backgrounds
- *  - light: cream border/text — for use over dark image/video backgrounds
+ * CTA variants for beige vs dark full-bleed sections.
  */
 export function Button({
   children,
@@ -23,10 +25,16 @@ export function Button({
   onClick,
   type = 'button',
   className = '',
-  variant = 'accent',
+  variant = 'cta',
 }: ButtonProps) {
   const baseClass =
-    variant === 'light' ? 'btn-accent-light' : 'btn-accent';
+    variant === 'light'
+      ? 'btn-accent-light'
+      : variant === 'cta-light'
+        ? 'btn-cta-light'
+        : variant === 'accent'
+          ? 'btn-accent'
+          : 'btn-cta';
   const cls = `${baseClass} ${variant === 'ghost' ? 'opacity-60 hover:opacity-100' : ''} ${className}`;
 
   if (to) {

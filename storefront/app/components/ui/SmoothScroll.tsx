@@ -12,9 +12,12 @@
  */
 import {useEffect} from 'react';
 import {gsap, ScrollTrigger} from '~/lib/animations';
+import {prefersReducedMotion} from '~/lib/motion';
 
 export function SmoothScroll() {
   useEffect(() => {
+    if (prefersReducedMotion()) return;
+
     let lenis: any;
     let gsapTickerFn: ((time: number) => void) | null = null;
 

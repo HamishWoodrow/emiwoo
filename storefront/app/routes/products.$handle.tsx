@@ -1,18 +1,50 @@
 import type {Route} from './+types/products.$handle';
-import {useState} from 'react';
+import {useLoaderData} from 'react-router';
+import {
+  getAdjacentAndFirstAvailableVariants,
+  getProductOptions,
+  getSelectedProductOptions,
+  useOptimisticVariant,
+  useSelectedOptionInUrlParam,
+} from '@shopify/hydrogen';
+import {Money} from '@shopify/hydrogen-react';
 import {Button} from '~/components/ui/Button';
 import {ParallaxSection} from '~/components/ui/ParallaxSection';
+import {ProductForm} from '~/components/ProductForm';
+import {PRODUCT_QUERY} from '~/graphql/product';
+import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 
-export const meta: Route.MetaFunction = () => [
-  {title: 'The Silk Blouse — Emi Woo'},
+export const meta: Route.MetaFunction = ({data}) => [
+  {
+    title:
+      data?.product?.title
+        ? `${data.product.title} — Emi Woo`
+        : 'Product — Emi Woo',
+  },
   {
     name: 'description',
-    content:
-      'The Emi Woo Silk Blouse. One style, every occasion. Crafted in pure Como silk.',
+    content: data?.product?.seo?.description ?? '',
   },
 ];
 
-const SIZES = ['XS', 'S', 'M', 'L', 'XL'];
+export async function loader({request, context, params}: Route.LoaderArgs) {
+  const handle = params.handle;
+  if (!handle) throw new Response('Not found', {status: 404});
+
+  const {storefront} = context;
+  const {product} = await storefront.query(PRODUCT_QUERY, {
+    variables: {
+      handle,
+      selectedOptions: getSelectedProductOptions(request),
+      country: storefront.i18n.country,
+      language: storefront.i18n.language,
+    },
+  });
+
+  if (!product?.id) throw new Response(null, {status: 404});
+  redirectIfHandleIsLocalized(request, {handle, data: product});
+  return {product};
+}
 
 const STYLING_EXAMPLES = [
   {
@@ -39,14 +71,23 @@ const MATERIAL_DETAILS = [
 ];
 
 export default function ProductPage() {
-  const [selectedSize, setSelectedSize] = useState('');
-  const [added, setAdded] = useState(false);
+  const {product} = useLoaderData<typeof loader>();
+  const selectedVariant = useOptimisticVariant(
+    product.selectedOrFirstAvailableVariant,
+    getAdjacentAndFirstAvailableVariants(product),
+  );
+  useSelectedOptionInUrlParam(selectedVariant?.selectedOptions);
+  const productOptions = getProductOptions({
+    ...product,
+    selectedOrFirstAvailableVariant: selectedVariant,
+  });
 
-  const handleAddToCart = () => {
-    if (!selectedSize) return;
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2500);
-  };
+  const heroSrc =
+    selectedVariant?.image?.url ?? '/images/placeholders/product-hero.jpg';
+  const heroAlt =
+    selectedVariant?.image?.altText ?? product.title;
+  const heroW = selectedVariant?.image?.width ?? 1600;
+  const heroH = selectedVariant?.image?.height ?? 2000;
 
   return (
     <>
@@ -76,8 +117,10 @@ export default function ProductPage() {
             }}
           >
             <img
-              src="/images/placeholders/product-hero.jpg"
-              alt="Emi Woo Silk Blouse"
+              src={heroSrc}
+              alt={heroAlt}
+              width={heroW}
+              height={heroH}
               style={{
                 width: '100%',
                 height: '100%',
@@ -123,19 +166,21 @@ export default function ProductPage() {
                   lineHeight: 1.1,
                 }}
               >
-                The Silk Blouse
+                {product.title}
               </h1>
-              <p
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(22px, 2.5vw, 32px)',
-                  fontWeight: 300,
-                  color: 'var(--color-accent)',
-                  marginTop: '12px',
-                }}
-              >
-                £485
-              </p>
+              {selectedVariant?.price && (
+                <p
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: 'clamp(22px, 2.5vw, 32px)',
+                    fontWeight: 300,
+                    color: 'var(--color-cta)',
+                    marginTop: '12px',
+                  }}
+                >
+                  <Money data={selectedVariant.price} />
+                </p>
+              )}
             </div>
 
             <div
@@ -146,98 +191,12 @@ export default function ProductPage() {
               }}
             />
 
-            {/* Size selector */}
-            <div>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'baseline',
-                  marginBottom: '16px',
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '9px',
-                    fontWeight: 400,
-                    letterSpacing: '0.22em',
-                    textTransform: 'uppercase',
-                    color: 'var(--color-text-secondary)',
-                  }}
-                >
-                  {selectedSize ? `Size: ${selectedSize}` : 'Select size'}
-                </span>
-                <button
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '9px',
-                    fontWeight: 300,
-                    letterSpacing: '0.12em',
-                    textDecoration: 'underline',
-                    textDecorationOffset: '4px',
-                    color: 'var(--color-text-secondary)',
-                  }}
-                >
-                  Size guide
-                </button>
-              </div>
-              <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap'}}>
-                {SIZES.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    style={{
-                      width: '48px',
-                      height: '48px',
-                      border: `1px solid ${
-                        selectedSize === size
-                          ? 'var(--color-accent)'
-                          : 'var(--color-border)'
-                      }`,
-                      background: 'transparent',
-                      cursor: 'pointer',
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '11px',
-                      fontWeight: 300,
-                      letterSpacing: '0.1em',
-                      color:
-                        selectedSize === size
-                          ? 'var(--color-accent)'
-                          : 'var(--color-text-secondary)',
-                      transition: 'border-color 0.3s, color 0.3s',
-                    }}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
+            <div className="pdp-product-form">
+              <ProductForm
+                productOptions={productOptions}
+                selectedVariant={selectedVariant}
+              />
             </div>
-
-            {/* Add to cart */}
-            <button
-              onClick={handleAddToCart}
-              disabled={!selectedSize}
-              className="btn-accent"
-              style={{
-                width: '100%',
-                textAlign: 'center',
-                opacity: selectedSize ? 1 : 0.4,
-                cursor: selectedSize ? 'pointer' : 'not-allowed',
-                transition: 'opacity 0.3s, background 0.4s, color 0.4s',
-                ...(added
-                  ? {
-                      background: 'var(--color-accent)',
-                      color: 'var(--color-bg)',
-                    }
-                  : {}),
-              }}
-            >
-              {added ? 'Added to Bag' : 'Add to Bag'}
-            </button>
 
             {/* Product brief */}
             <p
@@ -249,9 +208,9 @@ export default function ProductPage() {
                 color: 'var(--color-text-secondary)',
               }}
             >
-              100% Mulberry silk. Cut from a single length of 16mm charmeuse
-              woven in Como, Italy. One of those pieces you will wear every week
-              of the year.
+              {product.description
+                ? product.description
+                : '100% Mulberry silk, cut from a single length of charmeuse woven in Como, Italy.'}
             </p>
 
             {/* Shipping note */}

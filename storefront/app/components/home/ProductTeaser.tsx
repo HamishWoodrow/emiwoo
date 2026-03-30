@@ -2,6 +2,7 @@ import {useRef} from 'react';
 import {useGSAP} from '@gsap/react';
 import {gsap, ScrollTrigger} from '~/lib/animations';
 import {Button} from '~/components/ui/Button';
+import {PLACEHOLDER_IMAGES} from '~/content/home';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -35,6 +36,7 @@ export function ProductTeaser() {
   return (
     <section
       ref={sectionRef}
+      data-header-theme="dark"
       style={{
         position: 'relative',
         width: '100%',
@@ -48,8 +50,10 @@ export function ProductTeaser() {
       {/* Full-bleed product image */}
       <div style={{position: 'absolute', inset: 0}}>
         <img
-          src="/images/placeholders/product-teaser.jpg"
+          src={PLACEHOLDER_IMAGES.productTeaser}
           alt="Emi Woo Silk Blouse"
+          width={1600}
+          height={1200}
           style={{width: '100%', height: '100%', objectFit: 'cover'}}
         />
         <div
@@ -119,7 +123,9 @@ export function ProductTeaser() {
         </p>
 
         <div style={{marginTop: '8px'}}>
-          <Button to="/products/silk-blouse" variant="light">View the Blouse</Button>
+          <Button to="/products/silk-blouse" variant="cta-light">
+            View the Blouse
+          </Button>
         </div>
       </div>
     </section>

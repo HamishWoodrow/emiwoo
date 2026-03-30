@@ -2,11 +2,17 @@ import {useRef, useEffect, useState} from 'react';
 import {useGSAP} from '@gsap/react';
 import {gsap} from '~/lib/animations';
 import {Button} from '~/components/ui/Button';
+import {HERO, PLACEHOLDER_IMAGES} from '~/content/home';
+import {getMuxPlaybackIdHero} from '~/lib/media';
+import {prefersReducedMotion} from '~/lib/motion';
+import MuxPlayer from '@mux/mux-player-react';
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [muxReady, setMuxReady] = useState(false);
+  const muxHero = getMuxPlaybackIdHero();
 
   useEffect(() => {
     const onScroll = () => {
@@ -22,6 +28,10 @@ export function HeroSection() {
   useGSAP(
     () => {
       if (!contentRef.current) return;
+      if (prefersReducedMotion()) {
+        gsap.set(contentRef.current, {opacity: 1, y: 0});
+        return;
+      }
       gsap.fromTo(
         contentRef.current,
         {opacity: 0, y: 32},
@@ -40,6 +50,7 @@ export function HeroSection() {
   return (
     <section
       ref={sectionRef}
+      data-header-theme="dark"
       style={{
         position: 'relative',
         width: '100%',
@@ -50,19 +61,40 @@ export function HeroSection() {
         justifyContent: 'center',
       }}
     >
-      {/* Background video */}
+      {/* Background video — Mux when PUBLIC_MUX_PLAYBACK_ID_HERO is set */}
       <div style={{position: 'absolute', inset: 0}}>
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          style={{width: '100%', height: '100%', objectFit: 'cover'}}
-          poster="/images/placeholders/hero-poster.jpg"
-          aria-hidden="true"
-        >
-          <source src="/video/placeholders/hero-loop.mp4" type="video/mp4" />
-        </video>
+        {muxHero ? (
+          <MuxPlayer
+            playbackId={muxHero}
+            streamType="on-demand"
+            autoPlay
+            muted
+            loop
+            playsInline
+            thumbnailTime={0}
+            preferPlayback="mse"
+            onLoadedData={() => setMuxReady(true)}
+            style={{
+              width: '100%',
+              height: '100%',
+              opacity: muxReady ? 1 : 0,
+              transition: 'opacity 0.55s ease-out',
+            }}
+            aria-hidden="true"
+          />
+        ) : (
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{width: '100%', height: '100%', objectFit: 'cover'}}
+            poster={PLACEHOLDER_IMAGES.heroPoster}
+            aria-hidden="true"
+          >
+            <source src="/video/placeholders/hero-loop.mp4" type="video/mp4" />
+          </video>
+        )}
         <div
           style={{
             position: 'absolute',
@@ -99,7 +131,7 @@ export function HeroSection() {
             color: 'rgba(244,237,228,0.6)',
           }}
         >
-          Introducing
+          {HERO.kicker}
         </span>
 
         <h1
@@ -113,7 +145,7 @@ export function HeroSection() {
             textTransform: 'uppercase',
           }}
         >
-          Emi Woo
+          {HERO.title}
         </h1>
 
         <p
@@ -127,11 +159,13 @@ export function HeroSection() {
             marginTop: '4px',
           }}
         >
-          The Silk Blouse
+          {HERO.tagline}
         </p>
 
         <div style={{marginTop: '20px'}}>
-          <Button to="/intent" variant="light">Discover our intent</Button>
+          <Button to={HERO.ctaTo} variant="cta-light">
+            {HERO.ctaLabel}
+          </Button>
         </div>
       </div>
 

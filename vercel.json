@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "cd storefront && pnpm install",
+  "buildCommand": "cd storefront && pnpm run build",
+  "outputDirectory": "storefront/build/client",
+  "framework": "react-router"
+}

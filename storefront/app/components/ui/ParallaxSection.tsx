@@ -1,6 +1,8 @@
 import {useRef} from 'react';
 import {useGSAP} from '@gsap/react';
 import {gsap, ScrollTrigger} from '~/lib/animations';
+import {prefersReducedMotion} from '~/lib/motion';
+import {ParallaxMuxVideo} from '~/components/ui/ParallaxMuxVideo';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -9,6 +11,8 @@ interface ParallaxSectionProps {
   image?: string;
   /** Replaces image with a looping video */
   videoUrl?: string;
+  /** Mux playback ID — takes precedence over videoUrl when set */
+  muxPlaybackId?: string;
   /** Overlay opacity 0–1 */
   overlay?: number;
   /** Text content to float over the background */
@@ -19,16 +23,20 @@ interface ParallaxSectionProps {
   className?: string;
   /** aria-label for the section */
   ariaLabel?: string;
+  /** For header nav contrast (IntersectionObserver on homepage) */
+  headerTheme?: 'dark' | 'light';
 }
 
 export function ParallaxSection({
   image,
   videoUrl,
+  muxPlaybackId,
   overlay = 0.45,
   children,
   yOffset = 80,
   className = '',
   ariaLabel,
+  headerTheme = 'dark',
 }: ParallaxSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
@@ -36,6 +44,7 @@ export function ParallaxSection({
   useGSAP(
     () => {
       if (!sectionRef.current || !textRef.current) return;
+      if (prefersReducedMotion()) return;
 
       const isMobile = window.matchMedia('(max-width: 768px)').matches;
       const travel = isMobile ? yOffset * 0.5 : yOffset;
@@ -67,10 +76,13 @@ export function ParallaxSection({
       ref={sectionRef}
       className={`parallax-section ${className}`}
       aria-label={ariaLabel}
+      data-header-theme={headerTheme}
     >
       {/* Background layer */}
       <div className="parallax-bg">
-        {videoUrl ? (
+        {muxPlaybackId ? (
+          <ParallaxMuxVideo playbackId={muxPlaybackId} />
+        ) : videoUrl ? (
           <video
             autoPlay
             muted

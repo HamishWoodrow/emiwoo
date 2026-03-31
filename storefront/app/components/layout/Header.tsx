@@ -103,7 +103,9 @@ export function Header() {
     return () => observer.disconnect();
   }, [location.pathname]);
 
-  const onDark = isOverDark && !scrolled;
+  // Keep light nav controls while the header overlaps dark media sections,
+  // even after the user starts scrolling.
+  const onDark = isOverDark;
   const logoSubColor = onDark
     ? 'rgba(244,237,228,0.65)'
     : 'var(--color-text-secondary)';

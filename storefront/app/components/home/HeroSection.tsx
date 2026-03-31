@@ -50,13 +50,14 @@ export function HeroSection() {
       }
       gsap.fromTo(
         contentRef.current,
-        {opacity: 0, y: 32},
+        {opacity: 0.92, y: 22},
         {
           opacity: 1,
           y: 0,
-          duration: 1.4,
-          delay: 0.3,
+          duration: 1.1,
+          delay: 0.15,
           ease: 'power3.out',
+          immediateRender: false,
         },
       );
 
@@ -190,7 +191,7 @@ export function HeroSection() {
             inset: 0,
             zIndex: 3,
             background:
-              'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.4) 100%)',
+              'linear-gradient(to bottom, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.36) 52%, rgba(0,0,0,0.22) 100%)',
           }}
         />
       </div>
@@ -217,7 +218,7 @@ export function HeroSection() {
             alignItems: 'center',
             gap: '24px',
             padding: '0 24px',
-            opacity: 0, // SSR-safe: GSAP overwrites to 1 on mount
+            opacity: 1,
           }}
         >
         {/* All hero text is hardcoded cream — it's always on a dark video */}

@@ -65,6 +65,14 @@ export const STORY_BEATS = [
     body: 'There is a particular feeling that comes from wearing something made exactly right. Not just well-made — right. Emi Woo exists for that feeling, and for nothing else.',
     align: 'right' as const,
     overlay: 0.52,
+    ctas: [
+      {label: 'How it feels', to: '#story-feel'},
+      {label: 'Discover our fabrics', to: '#story-fabric'},
+      {
+        label: 'Discover how we make it',
+        to: '/products/silk-blouse#material-craft',
+      },
+    ] satisfies StoryBeatCta[],
   },
   {
     index: 3 as const,
@@ -75,5 +83,13 @@ export const STORY_BEATS = [
     body: 'Breathes in summer. Holds warmth in winter. Drapes without effort. This is what silk, done properly, can do.',
     align: 'center' as const,
     overlay: 0.55,
+    ctas: [
+      {label: 'Discover our fabrics', to: '#story-fabric'},
+      {label: 'How it feels', to: '#story-feel'},
+      {
+        label: 'Discover how we make it',
+        to: '/products/silk-blouse#material-craft',
+      },
+    ] satisfies StoryBeatCta[],
   },
 ];

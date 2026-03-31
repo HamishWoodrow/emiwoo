@@ -1,4 +1,5 @@
 import {Link, useRouteLoaderData} from 'react-router';
+import {BrandWordmark} from '~/components/layout/BrandWordmark';
 
 const SOCIAL_LINKS = [
   {label: 'Instagram', href: 'https://instagram.com/emiwoo'},
@@ -44,13 +45,7 @@ export function Footer() {
           {/* Brand */}
           <div className="flex flex-col gap-4 max-w-xs">
             <Link to="/" style={{textDecoration: 'none'}}>
-              <img
-                src="/images/brand/logo-wordmark-gold.png"
-                alt="Emi Woo"
-                width={160}
-                height={42}
-                style={{height: '36px', width: 'auto', filter: 'brightness(0.32)'}}
-              />
+              <BrandWordmark size="footer" />
             </Link>
             <p
               style={{

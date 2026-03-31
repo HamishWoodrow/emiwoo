@@ -45,6 +45,7 @@ export function ProductTeaser() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        padding: 0,
       }}
     >
       {/* Full-bleed product image */}

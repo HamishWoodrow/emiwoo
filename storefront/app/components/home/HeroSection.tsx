@@ -9,10 +9,20 @@ import MuxPlayer from '@mux/mux-player-react';
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const scrollWrapRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [muxReady, setMuxReady] = useState(false);
   const muxHero = getMuxPlaybackIdHero();
+
+  const markMuxReady = () => setMuxReady(true);
+
+  /** HLS/streaming often never fires `loadeddata`; avoid infinite black hero. */
+  useEffect(() => {
+    if (!muxHero) return;
+    const id = window.setTimeout(markMuxReady, 10_000);
+    return () => window.clearTimeout(id);
+  }, [muxHero]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -24,10 +34,10 @@ export function HeroSection() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // GSAP-driven entrance: runs on client only, no SSR flash
+  // Entrance + scroll-linked lift so hero copy rides upward over the video (stronger on mobile)
   useGSAP(
     () => {
-      if (!contentRef.current) return;
+      if (!contentRef.current || !sectionRef.current) return;
       if (prefersReducedMotion()) {
         gsap.set(contentRef.current, {opacity: 1, y: 0});
         return;
@@ -41,6 +51,25 @@ export function HeroSection() {
           duration: 1.4,
           delay: 0.3,
           ease: 'power3.out',
+        },
+      );
+
+      if (!scrollWrapRef.current) return;
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      const travel = isMobile ? 140 : 88;
+      gsap.fromTo(
+        scrollWrapRef.current,
+        {y: 0},
+        {
+          y: -travel,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 0.75,
+            invalidateOnRefresh: true,
+          },
         },
       );
     },
@@ -59,10 +88,29 @@ export function HeroSection() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        padding: 0,
       }}
     >
-      {/* Background video — Mux when PUBLIC_MUX_PLAYBACK_ID_HERO is set */}
+      {/* Poster always visible under video so Mux never shows a blank/black hero */}
       <div style={{position: 'absolute', inset: 0}}>
+        <img
+          src={PLACEHOLDER_IMAGES.heroPoster}
+          alt=""
+          width={1920}
+          height={1080}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          aria-hidden
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            zIndex: 0,
+          }}
+        />
         {muxHero ? (
           <MuxPlayer
             playbackId={muxHero}
@@ -72,13 +120,19 @@ export function HeroSection() {
             loop
             playsInline
             thumbnailTime={0}
-            preferPlayback="mse"
-            onLoadedData={() => setMuxReady(true)}
+            onLoadedData={markMuxReady}
+            onCanPlay={markMuxReady}
+            onPlaying={markMuxReady}
+            onError={markMuxReady}
             style={{
+              position: 'absolute',
+              inset: 0,
+              zIndex: 1,
               width: '100%',
               height: '100%',
               opacity: muxReady ? 1 : 0,
               transition: 'opacity 0.55s ease-out',
+              ...({'--media-object-fit': 'cover'} as React.CSSProperties),
             }}
             aria-hidden="true"
           />
@@ -88,7 +142,14 @@ export function HeroSection() {
             muted
             loop
             playsInline
-            style={{width: '100%', height: '100%', objectFit: 'cover'}}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              zIndex: 1,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
             poster={PLACEHOLDER_IMAGES.heroPoster}
             aria-hidden="true"
           >
@@ -99,27 +160,38 @@ export function HeroSection() {
           style={{
             position: 'absolute',
             inset: 0,
+            zIndex: 2,
             background:
               'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.4) 100%)',
           }}
         />
       </div>
 
-      {/* Content — starts invisible; GSAP reveals on mount */}
+      {/* Outer wrapper moves on scroll; inner handles entrance fade */}
       <div
-        ref={contentRef}
+        ref={scrollWrapRef}
         style={{
           position: 'relative',
           zIndex: 10,
-          textAlign: 'center',
+          width: '100%',
           display: 'flex',
-          flexDirection: 'column',
+          justifyContent: 'center',
           alignItems: 'center',
-          gap: '24px',
-          padding: '0 24px',
-          opacity: 0, // SSR-safe: GSAP overwrites to 1 on mount
         }}
       >
+        <div
+          ref={contentRef}
+          style={{
+            position: 'relative',
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '24px',
+            padding: '0 24px',
+            opacity: 0, // SSR-safe: GSAP overwrites to 1 on mount
+          }}
+        >
         {/* All hero text is hardcoded cream — it's always on a dark video */}
         <span
           style={{
@@ -166,6 +238,7 @@ export function HeroSection() {
           <Button to={HERO.ctaTo} variant="cta-light">
             {HERO.ctaLabel}
           </Button>
+        </div>
         </div>
       </div>
 

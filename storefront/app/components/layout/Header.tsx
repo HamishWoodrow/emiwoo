@@ -3,6 +3,7 @@ import {Link, useLocation, useRouteLoaderData} from 'react-router';
 import {useOptimisticCart} from '@shopify/hydrogen';
 import type {CartApiQueryFragment} from 'storefrontapi.generated';
 import {useAside} from '~/components/Aside';
+import {BrandWordmark} from '~/components/layout/BrandWordmark';
 
 const NAV_LINKS = [
   {to: '/intent', label: 'Intent'},
@@ -127,18 +128,7 @@ export function Header() {
           className="flex flex-col items-start gap-1 no-underline focus-visible:outline-offset-4"
           aria-label="Emi Woo — Home"
         >
-          <img
-            src="/images/brand/logo-wordmark-gold.png"
-            alt=""
-            width={140}
-            height={36}
-            style={{
-              height: 'clamp(22px, 3vw, 32px)',
-              width: 'auto',
-              display: 'block',
-              filter: onDark ? 'none' : 'brightness(0.35)',
-            }}
-          />
+          <BrandWordmark onDark={onDark} size="header" />
           <span
             style={{
               fontFamily: 'var(--font-body)',

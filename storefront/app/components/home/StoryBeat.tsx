@@ -39,6 +39,7 @@ export function StoryBeat({
       overlay={overlay}
       ariaLabel={`Story Beat ${index}`}
       headerTheme="dark"
+      yOffset={112}
     >
       <div
         className="container"

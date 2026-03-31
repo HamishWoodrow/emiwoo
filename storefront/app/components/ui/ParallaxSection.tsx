@@ -39,6 +39,7 @@ export function ParallaxSection({
   headerTheme = 'dark',
 }: ParallaxSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -47,7 +48,29 @@ export function ParallaxSection({
       if (prefersReducedMotion()) return;
 
       const isMobile = window.matchMedia('(max-width: 768px)').matches;
-      const travel = isMobile ? yOffset * 0.5 : yOffset;
+      /* Stronger vertical travel on small screens so copy visibly rides over the image */
+      const travel = isMobile ? Math.round(yOffset * 1.25) : yOffset;
+      const scrub = isMobile ? 0.65 : true;
+
+      // Background drifts with scroll; slight scale avoids edge gaps when translating
+      if (bgRef.current) {
+        gsap.set(bgRef.current, {scale: 1.08, transformOrigin: 'center center'});
+        gsap.fromTo(
+          bgRef.current,
+          {yPercent: -7},
+          {
+            yPercent: 7,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub,
+              invalidateOnRefresh: true,
+            },
+          },
+        );
+      }
 
       // fromTo with explicit y:0 prevents text sitting at wrong position
       // before the trigger fires. invalidateOnRefresh recalculates positions
@@ -62,7 +85,7 @@ export function ParallaxSection({
             trigger: sectionRef.current,
             start: 'top bottom',
             end: 'bottom top',
-            scrub: true,
+            scrub,
             invalidateOnRefresh: true,
           },
         },
@@ -78,8 +101,8 @@ export function ParallaxSection({
       aria-label={ariaLabel}
       data-header-theme={headerTheme}
     >
-      {/* Background layer */}
-      <div className="parallax-bg">
+      {/* Background layer — subtle vertical drift vs text (ScrollTrigger) */}
+      <div ref={bgRef} className="parallax-bg">
         {muxPlaybackId ? (
           <ParallaxMuxVideo playbackId={muxPlaybackId} />
         ) : videoUrl ? (

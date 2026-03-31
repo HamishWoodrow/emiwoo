@@ -1,5 +1,8 @@
 import {useState, useEffect, useRef} from 'react';
-import {Link, useLocation} from 'react-router';
+import {Link, useLocation, useRouteLoaderData} from 'react-router';
+import {useOptimisticCart} from '@shopify/hydrogen';
+import type {CartApiQueryFragment} from 'storefrontapi.generated';
+import {useAside} from '~/components/Aside';
 
 const NAV_LINKS = [
   {to: '/intent', label: 'Intent'},
@@ -7,6 +10,41 @@ const NAV_LINKS = [
   {to: '/newsroom', label: 'Newsroom'},
   {to: '/contact', label: 'Contact'},
 ];
+
+type RootLoaderData = {cart?: CartApiQueryFragment | null};
+
+function HeaderCartTrigger({
+  color,
+  onBeforeOpen,
+}: {
+  color: string;
+  onBeforeOpen?: () => void;
+}) {
+  const {open} = useAside();
+  const rootData = useRouteLoaderData('root') as RootLoaderData | undefined;
+  const cart = useOptimisticCart(rootData?.cart ?? null);
+  const count = cart?.totalQuantity ?? 0;
+
+  return (
+    <button
+      type="button"
+      className="header-cart-trigger"
+      onClick={() => {
+        onBeforeOpen?.();
+        open('cart');
+      }}
+      aria-label={
+        count ? `Open shopping bag, ${count} items` : 'Open shopping bag'
+      }
+      style={{color}}
+    >
+      <span className="header-cart-trigger-label">Bag</span>
+      {count > 0 ? (
+        <span className="header-cart-trigger-count">{count}</span>
+      ) : null}
+    </button>
+  );
+}
 
 /**
  * Transparent over dark sections; frosted page background when scrolled.
@@ -117,34 +155,38 @@ export function Header() {
           </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-10" aria-label="Main navigation">
-          {NAV_LINKS.map(({to, label}) => (
+        <div className="hidden md:flex items-center gap-10">
+          <nav className="flex items-center gap-10" aria-label="Main navigation">
+            {NAV_LINKS.map(({to, label}) => (
+              <Link
+                key={to}
+                to={to}
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '10px',
+                  fontWeight: 400,
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  color: location.pathname === to ? navActiveColor : navColor,
+                  textDecoration: 'none',
+                  transition: 'color 0.3s',
+                }}
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
+          <div className="flex items-center gap-8">
+            <HeaderCartTrigger color={navColor} />
             <Link
-              key={to}
-              to={to}
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '10px',
-                fontWeight: 400,
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: location.pathname === to ? navActiveColor : navColor,
-                textDecoration: 'none',
-                transition: 'color 0.3s',
-              }}
+              to="/products/silk-blouse"
+              className={onDark ? 'btn-cta-light' : 'btn-cta'}
+              style={{fontSize: '9px', padding: '10px 24px'}}
             >
-              {label}
+              Shop
             </Link>
-          ))}
-        </nav>
-
-        <Link
-          to="/products/silk-blouse"
-          className={onDark ? 'btn-cta-light' : 'btn-cta'}
-          style={{fontSize: '9px', padding: '10px 24px'}}
-        >
-          Shop
-        </Link>
+          </div>
+        </div>
 
         <button
           type="button"
@@ -191,6 +233,12 @@ export function Header() {
           visibility: menuOpen ? 'visible' : 'hidden',
         }}
       >
+        <div className="md:hidden">
+          <HeaderCartTrigger
+            color="var(--color-text-primary)"
+            onBeforeOpen={() => setMenuOpen(false)}
+          />
+        </div>
         {NAV_LINKS.map(({to, label}) => (
           <Link
             key={to}

@@ -107,35 +107,40 @@ export function ErrorBoundary() {
     errorMessage = error.message;
   }
 
+  // Render only inner content: `Layout` already wraps the app in <html>/<body>.
+  // A second document here caused nested <html> in SSR, invalid DOM, and hydration #418.
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body
+    <div
+      style={{
+        background: '#EAE3C9',
+        color: '#1a1611',
+        fontFamily: 'system-ui, sans-serif',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        margin: 0,
+        gap: '1rem',
+        padding: '2rem',
+        boxSizing: 'border-box',
+      }}
+    >
+      <h1 style={{fontFamily: 'serif', fontSize: '4rem', margin: 0}}>
+        {errorStatus}
+      </h1>
+      <p
         style={{
-          background: '#EAE3C9',
-          color: '#1a1611',
-          fontFamily: 'system-ui, sans-serif',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
-          margin: 0,
-          gap: '1rem',
+          color: '#73889C',
+          letterSpacing: '0.15em',
+          fontSize: '0.85rem',
+          textTransform: 'uppercase',
+          textAlign: 'center',
+          maxWidth: '36rem',
         }}
       >
-        <h1 style={{fontFamily: 'serif', fontSize: '4rem', margin: 0}}>
-          {errorStatus}
-        </h1>
-        <p style={{color: '#73889C', letterSpacing: '0.15em', fontSize: '0.85rem', textTransform: 'uppercase'}}>
-          {errorMessage}
-        </p>
-      </body>
-    </html>
+        {errorMessage}
+      </p>
+    </div>
   );
 }

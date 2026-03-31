@@ -3,32 +3,13 @@ import {useGSAP} from '@gsap/react';
 import {gsap} from '~/lib/animations';
 import {Button} from '~/components/ui/Button';
 import {HERO, PLACEHOLDER_IMAGES} from '~/content/home';
-import {getMuxPlaybackIdHero} from '~/lib/media';
 import {prefersReducedMotion} from '~/lib/motion';
-import MuxPlayer from '@mux/mux-player-react';
 
 export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const scrollWrapRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
-  const [muxReady, setMuxReady] = useState(false);
-  const muxHero = getMuxPlaybackIdHero();
-
-  const markMuxReady = () => setMuxReady(true);
-
-  /** Mux only after mount — avoids iOS/WebKit painting an opaque black layer over the poster during SSR/hydration. */
-  const [client, setClient] = useState(false);
-  useEffect(() => {
-    setClient(true);
-  }, []);
-
-  /** HLS/streaming often never fires `loadeddata`; avoid infinite black hero. */
-  useEffect(() => {
-    if (!muxHero) return;
-    const id = window.setTimeout(markMuxReady, 10_000);
-    return () => window.clearTimeout(id);
-  }, [muxHero]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -98,7 +79,7 @@ export function HeroSection() {
         padding: 0,
       }}
     >
-      {/* Solid + CSS bg + img: triple fallback so hero never renders empty on iOS / failed assets */}
+      {/* Static placeholder hero for now: guaranteed visible on all browsers */}
       <div style={{position: 'absolute', inset: 0}}>
         <div
           aria-hidden
@@ -138,53 +119,6 @@ export function HeroSection() {
             zIndex: 1,
           }}
         />
-        {muxHero && client ? (
-          <MuxPlayer
-            playbackId={muxHero}
-            streamType="on-demand"
-            autoPlay
-            muted
-            loop
-            playsInline
-            thumbnailTime={0}
-            onLoadedData={markMuxReady}
-            onCanPlay={markMuxReady}
-            onPlaying={markMuxReady}
-            onError={markMuxReady}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              zIndex: 2,
-              width: '100%',
-              height: '100%',
-              /* opacity:0 on video still composites black on some iOS builds — hide until ready */
-              visibility: muxReady ? 'visible' : 'hidden',
-              pointerEvents: 'none',
-              ...({'--media-object-fit': 'cover'} as React.CSSProperties),
-            }}
-            aria-hidden="true"
-          />
-        ) : null}
-        {!muxHero ? (
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            style={{
-              position: 'absolute',
-              inset: 0,
-              zIndex: 2,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-            }}
-            poster={PLACEHOLDER_IMAGES.heroPoster}
-            aria-hidden="true"
-          >
-            <source src="/video/placeholders/hero-loop.mp4" type="video/mp4" />
-          </video>
-        ) : null}
         <div
           style={{
             position: 'absolute',

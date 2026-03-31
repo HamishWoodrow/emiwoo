@@ -49,11 +49,6 @@ export const STORY_BEATS = [
         label: 'Discover how we make it',
         to: '/products/silk-blouse#material-craft',
       },
-      {
-        label: 'Discover our fabrics',
-        to: '#story-fabric',
-      },
-      {label: 'How it feels', to: '#story-feel'},
     ] satisfies StoryBeatCta[],
   },
   {
@@ -65,14 +60,7 @@ export const STORY_BEATS = [
     body: 'There is a particular feeling that comes from wearing something made exactly right. Not just well-made — right. Emi Woo exists for that feeling, and for nothing else.',
     align: 'right' as const,
     overlay: 0.52,
-    ctas: [
-      {label: 'How it feels', to: '#story-feel'},
-      {label: 'Discover our fabrics', to: '#story-fabric'},
-      {
-        label: 'Discover how we make it',
-        to: '/products/silk-blouse#material-craft',
-      },
-    ] satisfies StoryBeatCta[],
+    ctas: [{label: 'How it feels', to: '#story-feel'}] satisfies StoryBeatCta[],
   },
   {
     index: 3 as const,
@@ -85,11 +73,6 @@ export const STORY_BEATS = [
     overlay: 0.55,
     ctas: [
       {label: 'Discover our fabrics', to: '#story-fabric'},
-      {label: 'How it feels', to: '#story-feel'},
-      {
-        label: 'Discover how we make it',
-        to: '/products/silk-blouse#material-craft',
-      },
     ] satisfies StoryBeatCta[],
   },
 ];

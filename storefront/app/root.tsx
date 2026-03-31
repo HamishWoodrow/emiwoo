@@ -40,7 +40,10 @@ export function links() {
 }
 
 export async function loader({request, context}: Route.LoaderArgs) {
-  const cart = await context.cart.get();
+  const cart =
+    context?.cart != null
+      ? await context.cart.get().catch(() => null)
+      : null;
   return {
     cart: cart ?? null,
     url: request.url,

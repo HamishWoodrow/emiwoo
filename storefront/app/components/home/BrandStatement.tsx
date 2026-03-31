@@ -46,88 +46,35 @@ export function BrandStatement() {
     <section
       ref={sectionRef}
       data-header-theme="light"
-      style={{
-        background: 'var(--color-bg)',
-        padding: 'clamp(72px, 9vw, 120px) var(--container-pad)',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '32px',
-      }}
+      className="brand-statement-section"
     >
-      {/* Top rule */}
-      <div
-        style={{
-          width: '1px',
-          height: '40px',
-          background: 'var(--color-accent)',
-          opacity: 0.5,
-        }}
-      />
+      <div className="brand-statement-rule" />
 
-      {/* Statement text */}
-      <div ref={linesRef} style={{textAlign: 'center'}}>
-        {BRAND_STATEMENT_LINES.map((line, li) => (
-          <div
-            key={li}
-            style={{
-              lineHeight: 1.05,
-              marginBottom:
-                li < BRAND_STATEMENT_LINES.length - 1 ? '0.12em' : 0,
-            }}
-          >
-            {line.split(' ').map((word, wi) => (
-              <span
-                key={wi}
-                className="reveal-word"
-                style={{
-                  display: 'inline-block',
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(44px, 7.5vw, 96px)',
-                  fontWeight: 300,
-                  letterSpacing: '-0.01em',
-                  color: 'var(--color-text-primary)',
-                  marginRight: '0.28em',
-                  willChange: 'transform, opacity',
-                  opacity: 0, // SSR-safe: GSAP animates this to 1 on scroll
-                }}
-              >
-                {word}
-              </span>
-            ))}
-          </div>
-        ))}
+      <div className="container brand-statement-grid">
+        <div ref={linesRef} className="brand-statement-lines">
+          {BRAND_STATEMENT_LINES.map((line, li) => (
+            <div key={li} className="brand-statement-line">
+              {line.split(' ').map((word, wi) => (
+                <span key={wi} className="reveal-word brand-statement-word">
+                  {word}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        <div className="brand-statement-meta reveal-word">
+          <span className="brand-statement-meta-kicker">Emi Woo Intent</span>
+          <p className="brand-statement-meta-copy">
+            Not a collection. Not a capsule.
+            <br />
+            One perfect thing, made for every occasion.
+          </p>
+          <div className="brand-statement-meta-rule" />
+        </div>
       </div>
 
-      {/* Sub-copy — initially hidden, fades in with words */}
-      <p
-        className="reveal-word"
-        style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: 'clamp(12px, 1.4vw, 14px)',
-          fontWeight: 300,
-          letterSpacing: '0.18em',
-          textTransform: 'uppercase',
-          color: 'var(--color-text-secondary)',
-          maxWidth: '400px',
-          textAlign: 'center',
-          lineHeight: 1.9,
-          opacity: 0,
-        }}
-      >
-        Not a collection. Not a capsule.<br />
-        One perfect thing, made for every occasion.
-      </p>
-
-      {/* Bottom rule */}
-      <div
-        style={{
-          width: '1px',
-          height: '40px',
-          background: 'var(--color-accent)',
-          opacity: 0.5,
-        }}
-      />
+      <div className="brand-statement-rule" />
     </section>
   );
 }

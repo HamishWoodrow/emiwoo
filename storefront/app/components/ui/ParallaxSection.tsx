@@ -21,6 +21,8 @@ interface ParallaxSectionProps {
   yOffset?: number;
   /** className for outer section */
   className?: string;
+  /** className for background layer */
+  bgClassName?: string;
   /** aria-label for the section */
   ariaLabel?: string;
   /** For header nav contrast (IntersectionObserver on homepage) */
@@ -37,6 +39,7 @@ export function ParallaxSection({
   children,
   yOffset = 80,
   className = '',
+  bgClassName = '',
   ariaLabel,
   headerTheme = 'dark',
   id,
@@ -106,7 +109,7 @@ export function ParallaxSection({
       data-header-theme={headerTheme}
     >
       {/* Background layer — subtle vertical drift vs text (ScrollTrigger) */}
-      <div ref={bgRef} className="parallax-bg">
+      <div ref={bgRef} className={`parallax-bg ${bgClassName}`}>
         {muxPlaybackId ? (
           <ParallaxMuxVideo playbackId={muxPlaybackId} />
         ) : videoUrl ? (

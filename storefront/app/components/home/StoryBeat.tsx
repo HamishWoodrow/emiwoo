@@ -36,6 +36,18 @@ export function StoryBeat({
 }: StoryBeatProps) {
   const isLeft = align === 'left';
   const isCenter = align === 'center';
+  const layoutClass = isCenter
+    ? 'story-beat--center'
+    : isLeft
+      ? 'story-beat--left'
+      : 'story-beat--right';
+  const sectionClass = index === 2 ? 'story-beat--compact' : 'story-beat--tall';
+  const mediaClass =
+    index === 1
+      ? 'story-beat-media--framed-left'
+      : index === 2
+        ? 'story-beat-media--framed-right'
+        : 'story-beat-media--full';
 
   return (
     <ParallaxSection
@@ -47,96 +59,39 @@ export function StoryBeat({
       ariaLabel={`Story Beat ${index}`}
       headerTheme="dark"
       yOffset={112}
+      className={`story-beat ${sectionClass}`}
+      bgClassName={mediaClass}
     >
       <div
-        className="container"
-        style={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: isCenter ? 'center' : isLeft ? 'flex-start' : 'flex-end',
-        }}
+        className={`container story-beat-inner ${layoutClass}`}
       >
-        <div
-          style={{
-            maxWidth: isCenter ? '680px' : '520px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '20px',
-            textAlign: isCenter ? 'center' : 'left',
-          }}
-        >
+        <div className="story-beat-panel">
           {/* Eyebrow */}
           {eyebrow && (
-            <span
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '9px',
-                fontWeight: 400,
-                letterSpacing: '0.3em',
-                textTransform: 'uppercase',
-                color: 'var(--color-accent)',
-              }}
-            >
+            <span className="story-beat-eyebrow">
               {eyebrow}
             </span>
           )}
 
-          {/* Heading */}
-          <h2
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(36px, 5vw, 64px)',
-              fontWeight: 300,
-              lineHeight: 1.1,
-              letterSpacing: '-0.01em',
-              color: '#f4ede4',
-            }}
-            dangerouslySetInnerHTML={{__html: heading}}
-          />
-
-          {/* Gold rule */}
-          <div
-            style={{
-              width: '40px',
-              height: '1px',
-              background: 'var(--color-accent)',
-              ...(isCenter ? {margin: '0 auto'} : {}),
-            }}
-          />
-
-          {/* Body — always cream: text lives over dark image overlay */}
-          <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'clamp(13px, 1.4vw, 15px)',
-              fontWeight: 300,
-              lineHeight: 1.8,
-              letterSpacing: '0.04em',
-              color: 'rgba(244,237,228,0.75)',
-              maxWidth: '400px',
-              ...(isCenter ? {margin: '0 auto'} : {}),
-            }}
-          >
-            {body}
-          </p>
-
-          {ctas && ctas.length > 0 ? (
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '12px',
-                marginTop: '12px',
-                justifyContent: isCenter ? 'center' : 'flex-start',
-              }}
-            >
-              {ctas.map((c) => (
-                <Button key={c.label} to={c.to} variant="cta-light">
-                  {c.label}
-                </Button>
-              ))}
+          <div className="story-beat-content-grid">
+            <h2
+              className="story-beat-heading"
+              dangerouslySetInnerHTML={{__html: heading}}
+            />
+            <div className="story-beat-copy-column">
+              <div className="story-beat-rule" />
+              <p className="story-beat-body">{body}</p>
+              {ctas && ctas.length > 0 ? (
+                <div className="story-beat-cta-row">
+                  {ctas.map((c) => (
+                    <Button key={c.label} to={c.to} variant="cta-light">
+                      {c.label}
+                    </Button>
+                  ))}
+                </div>
+              ) : null}
             </div>
-          ) : null}
+          </div>
         </div>
       </div>
     </ParallaxSection>

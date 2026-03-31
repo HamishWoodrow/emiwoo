@@ -37,16 +37,7 @@ export function ProductTeaser() {
     <section
       ref={sectionRef}
       data-header-theme="dark"
-      style={{
-        position: 'relative',
-        width: '100%',
-        height: 'clamp(480px, 80vh, 860px)',
-        overflow: 'hidden',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 0,
-      }}
+      className="product-teaser-section"
     >
       {/* Full-bleed product image */}
       <div style={{position: 'absolute', inset: 0}}>
@@ -68,62 +59,20 @@ export function ProductTeaser() {
       </div>
 
       {/* Content */}
-      <div
-        ref={contentRef}
-        style={{
-          position: 'relative',
-          zIndex: 10,
-          textAlign: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '20px',
-          padding: '0 24px',
-          marginTop: 'auto',
-          paddingBottom: '80px',
-          width: '100%',
-        }}
-      >
-        <span
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '9px',
-            fontWeight: 400,
-            letterSpacing: '0.3em',
-            textTransform: 'uppercase',
-            color: 'rgba(244,237,228,0.6)',  /* hardcoded: always on dark image */
-          }}
-        >
+      <div ref={contentRef} className="product-teaser-content container">
+        <span className="product-teaser-kicker">
           The Blouse
         </span>
 
-        <h2
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(32px, 5vw, 56px)',
-            fontWeight: 300,
-            letterSpacing: '0.06em',
-            color: '#f4ede4',  /* hardcoded cream: always on dark image */
-            lineHeight: 1.1,
-          }}
-        >
+        <h2 className="product-teaser-title">
           The Silk Blouse
         </h2>
 
-        <p
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(15px, 1.8vw, 18px)',
-            fontWeight: 300,
-            fontStyle: 'italic',
-            color: 'rgba(244,237,228,0.65)',
-            letterSpacing: '0.04em',
-          }}
-        >
+        <p className="product-teaser-subtitle">
           Where the collection begins — more pieces to follow.
         </p>
 
-        <div style={{marginTop: '8px'}}>
+        <div className="product-teaser-cta">
           <Button to="/products/silk-blouse" variant="cta-light">
             View the Blouse
           </Button>

@@ -70,88 +70,90 @@ export function Header() {
       <header
         className="site-header scrolled transition-[background,backdrop-filter,border-color] duration-500"
       >
-        <Link
-          to="/"
-          className="flex flex-col items-start gap-1 no-underline focus-visible:outline-offset-4"
-          aria-label="Emi Woo — Home"
-        >
-          <BrandWordmark onDark={false} size="header" />
-          <span
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '8px',
-              fontWeight: 400,
-              letterSpacing: '0.28em',
-              color: logoSubColor,
-              textTransform: 'uppercase',
-              lineHeight: 1,
-              transition: 'color 0.4s',
-            }}
+        <div className="site-header-inner">
+          <Link
+            to="/"
+            className="flex flex-col items-start gap-1 no-underline focus-visible:outline-offset-4"
+            aria-label="Emi Woo — Home"
           >
-            Timeless womenswear
-          </span>
-        </Link>
-
-        <div className="hidden md:flex items-center gap-10">
-          <nav className="flex items-center gap-10" aria-label="Main navigation">
-            {NAV_LINKS.map(({to, label}) => (
-              <Link
-                key={to}
-                to={to}
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '10px',
-                  fontWeight: 400,
-                  letterSpacing: '0.2em',
-                  textTransform: 'uppercase',
-                  color: location.pathname === to ? navActiveColor : navColor,
-                  textDecoration: 'none',
-                  transition: 'color 0.3s',
-                }}
-              >
-                {label}
-              </Link>
-            ))}
-          </nav>
-          <div className="flex items-center gap-8">
-            <HeaderCartTrigger color={navColor} />
-            <Link
-              to="/products/silk-blouse"
-              className="btn-cta"
-              style={{fontSize: '9px', padding: '10px 24px'}}
-            >
-              Shop
-            </Link>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8"
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={menuOpen}
-          style={{background: 'none', border: 'none', cursor: 'pointer'}}
-        >
-          {[
-            menuOpen ? 'translateY(5px) rotate(45deg)' : 'none',
-            'none',
-            menuOpen ? 'translateY(-5px) rotate(-45deg)' : 'none',
-          ].map((transform, i) => (
+            <BrandWordmark onDark={false} size="header" />
             <span
-              key={i}
               style={{
-                display: 'block',
-                width: '22px',
-                height: '1px',
-                background: burgerColor,
-                transition: 'transform 0.3s, opacity 0.3s, background 0.4s',
-                transform,
-                opacity: i === 1 && menuOpen ? 0 : 1,
+                fontFamily: 'var(--font-body)',
+                fontSize: '8px',
+                fontWeight: 400,
+                letterSpacing: '0.28em',
+                color: logoSubColor,
+                textTransform: 'uppercase',
+                lineHeight: 1,
+                transition: 'color 0.4s',
               }}
-            />
-          ))}
-        </button>
+            >
+              Timeless womenswear
+            </span>
+          </Link>
+
+          <div className="site-header-desktop-nav items-center gap-10">
+            <nav className="site-header-nav-links" aria-label="Main navigation">
+              {NAV_LINKS.map(({to, label}) => (
+                <Link
+                  key={to}
+                  to={to}
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '10px',
+                    fontWeight: 400,
+                    letterSpacing: '0.2em',
+                    textTransform: 'uppercase',
+                    color: location.pathname === to ? navActiveColor : navColor,
+                    textDecoration: 'none',
+                    transition: 'color 0.3s',
+                  }}
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
+            <div className="site-header-actions">
+              <HeaderCartTrigger color={navColor} />
+              <Link
+                to="/products/silk-blouse"
+                className="btn-cta"
+                style={{fontSize: '9px', padding: '10px 24px'}}
+              >
+                Shop
+              </Link>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="site-header-mobile-toggle flex flex-col justify-center gap-1.5 w-8 h-8"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+            style={{background: 'none', border: 'none', cursor: 'pointer'}}
+          >
+            {[
+              menuOpen ? 'translateY(5px) rotate(45deg)' : 'none',
+              'none',
+              menuOpen ? 'translateY(-5px) rotate(-45deg)' : 'none',
+            ].map((transform, i) => (
+              <span
+                key={i}
+                style={{
+                  display: 'block',
+                  width: '22px',
+                  height: '1px',
+                  background: burgerColor,
+                  transition: 'transform 0.3s, opacity 0.3s, background 0.4s',
+                  transform,
+                  opacity: i === 1 && menuOpen ? 0 : 1,
+                }}
+              />
+            ))}
+          </button>
+        </div>
       </header>
 
       <div
@@ -170,7 +172,7 @@ export function Header() {
           visibility: menuOpen ? 'visible' : 'hidden',
         }}
       >
-        <div className="md:hidden">
+        <div className="site-mobile-overlay-cart">
           <HeaderCartTrigger
             color="var(--color-text-primary)"
             onBeforeOpen={() => setMenuOpen(false)}

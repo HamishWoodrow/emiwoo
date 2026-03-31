@@ -9,6 +9,7 @@ const NAV_LINKS = [
   {to: '/intent', label: 'Intent'},
   {to: '/about', label: 'About'},
   {to: '/newsroom', label: 'Newsroom'},
+  {to: '/faq', label: 'FAQ'},
   {to: '/contact', label: 'Contact'},
 ];
 
@@ -52,80 +53,29 @@ function HeaderCartTrigger({
  * Uses IntersectionObserver on [data-header-theme] markers (homepage).
  */
 export function Header() {
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isOverDark, setIsOverDark] = useState(true);
   const location = useLocation();
 
   useEffect(() => {
     setMenuOpen(false);
   }, [location.pathname]);
 
-  useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 60);
-    };
-    window.addEventListener('scroll', onScroll, {passive: true});
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  useEffect(() => {
-    if (location.pathname !== '/') {
-      setIsOverDark(false);
-      return;
-    }
-
-    const nodes = document.querySelectorAll<HTMLElement>('[data-header-theme]');
-    if (nodes.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort(
-            (a, b) => a.boundingClientRect.top - b.boundingClientRect.top,
-          );
-        const first = visible[0]?.target as HTMLElement | undefined;
-        const themefirst = first?.dataset.headerTheme;
-        if (themefirst === 'dark' || themefirst === 'light') {
-          setIsOverDark(themefirst === 'dark');
-        }
-      },
-      {
-        root: null,
-        rootMargin: '-64px 0px -55% 0px',
-        threshold: [0, 0.08, 0.15, 0.25],
-      },
-    );
-
-    nodes.forEach((n) => observer.observe(n));
-    return () => observer.disconnect();
-  }, [location.pathname]);
-
-  // Keep light nav controls while the header overlaps dark media sections,
-  // even after the user starts scrolling.
-  const onDark = isOverDark;
-  const logoSubColor = onDark
-    ? 'rgba(244,237,228,0.65)'
-    : 'var(--color-text-secondary)';
-  const navColor = onDark ? 'rgba(244,237,228,0.75)' : 'var(--color-text-secondary)';
-  const navActiveColor = onDark ? '#f4ede4' : 'var(--color-cta)';
-  const burgerColor = onDark ? '#f4ede4' : 'var(--color-text-primary)';
+  const logoSubColor = 'var(--color-text-secondary)';
+  const navColor = 'var(--color-text-secondary)';
+  const navActiveColor = 'var(--color-cta)';
+  const burgerColor = 'var(--color-text-primary)';
 
   return (
     <>
       <header
-        className={`site-header transition-[background,backdrop-filter,border-color] duration-500 ${
-          scrolled ? 'scrolled' : ''
-        }`}
+        className="site-header scrolled transition-[background,backdrop-filter,border-color] duration-500"
       >
         <Link
           to="/"
           className="flex flex-col items-start gap-1 no-underline focus-visible:outline-offset-4"
           aria-label="Emi Woo — Home"
         >
-          <BrandWordmark onDark={onDark} size="header" />
+          <BrandWordmark onDark={false} size="header" />
           <span
             style={{
               fontFamily: 'var(--font-body)',
@@ -167,7 +117,7 @@ export function Header() {
             <HeaderCartTrigger color={navColor} />
             <Link
               to="/products/silk-blouse"
-              className={onDark ? 'btn-cta-light' : 'btn-cta'}
+              className="btn-cta"
               style={{fontSize: '9px', padding: '10px 24px'}}
             >
               Shop

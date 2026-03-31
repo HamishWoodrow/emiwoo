@@ -14,14 +14,15 @@ const NAV_LINKS = [
   {to: '/intent', label: 'Intent'},
   {to: '/about', label: 'About'},
   {to: '/newsroom', label: 'Newsroom'},
+  {to: '/faq', label: 'FAQ'},
   {to: '/contact', label: 'Contact'},
   {to: '/products/silk-blouse', label: 'Shop'},
 ];
 
 const LEGAL_LINKS = [
-  {href: '#', label: 'Privacy Policy'},
-  {href: '#', label: 'Terms of Service'},
-  {href: '#', label: 'Shipping & Returns'},
+  {to: '/privacy-policy', label: 'Privacy Policy'},
+  {to: '/terms-of-service', label: 'Terms of Service'},
+  {to: '/shipping-returns', label: 'Shipping & Returns'},
 ];
 
 type RootLoaderData = {year?: number};
@@ -158,10 +159,10 @@ export function Footer() {
             © {year} Emi Woo. All rights reserved.
           </p>
           <div className="flex gap-6">
-            {LEGAL_LINKS.map(({href, label}) => (
-              <a
+            {LEGAL_LINKS.map(({to, label}) => (
+              <Link
                 key={label}
-                href={href}
+                to={to}
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '10px',
@@ -172,7 +173,7 @@ export function Footer() {
                 }}
               >
                 {label}
-              </a>
+              </Link>
             ))}
           </div>
         </div>

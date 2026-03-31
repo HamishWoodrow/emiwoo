@@ -1,4 +1,6 @@
 import {ParallaxSection} from '~/components/ui/ParallaxSection';
+import {Button} from '~/components/ui/Button';
+import type {StoryBeatCta} from '~/content/home';
 
 interface StoryBeatProps {
   image?: string;
@@ -11,6 +13,8 @@ interface StoryBeatProps {
   overlay?: number;
   /** Unique index — used for alt text and aria labels */
   index: number;
+  sectionId?: string;
+  ctas?: StoryBeatCta[];
 }
 
 /**
@@ -27,12 +31,15 @@ export function StoryBeat({
   align = 'left',
   overlay = 0.5,
   index,
+  sectionId,
+  ctas,
 }: StoryBeatProps) {
   const isLeft = align === 'left';
   const isCenter = align === 'center';
 
   return (
     <ParallaxSection
+      id={sectionId}
       image={image}
       videoUrl={videoUrl}
       muxPlaybackId={muxPlaybackId}
@@ -112,6 +119,24 @@ export function StoryBeat({
           >
             {body}
           </p>
+
+          {ctas && ctas.length > 0 ? (
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '12px',
+                marginTop: '12px',
+                justifyContent: isCenter ? 'center' : 'flex-start',
+              }}
+            >
+              {ctas.map((c) => (
+                <Button key={c.label} to={c.to} variant="cta-light">
+                  {c.label}
+                </Button>
+              ))}
+            </div>
+          ) : null}
         </div>
       </div>
     </ParallaxSection>

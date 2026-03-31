@@ -17,6 +17,12 @@ export function HeroSection() {
 
   const markMuxReady = () => setMuxReady(true);
 
+  /** Mux only after mount — avoids iOS/WebKit painting an opaque black layer over the poster during SSR/hydration. */
+  const [client, setClient] = useState(false);
+  useEffect(() => {
+    setClient(true);
+  }, []);
+
   /** HLS/streaming often never fires `loadeddata`; avoid infinite black hero. */
   useEffect(() => {
     if (!muxHero) return;
@@ -91,8 +97,28 @@ export function HeroSection() {
         padding: 0,
       }}
     >
-      {/* Poster always visible under video so Mux never shows a blank/black hero */}
+      {/* Solid + CSS bg + img: triple fallback so hero never renders empty on iOS / failed assets */}
       <div style={{position: 'absolute', inset: 0}}>
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 0,
+            backgroundColor: '#1a1611',
+          }}
+        />
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 0,
+            backgroundImage: `url(${PLACEHOLDER_IMAGES.heroPoster})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
         <img
           src={PLACEHOLDER_IMAGES.heroPoster}
           alt=""
@@ -108,10 +134,10 @@ export function HeroSection() {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            zIndex: 0,
+            zIndex: 1,
           }}
         />
-        {muxHero ? (
+        {muxHero && client ? (
           <MuxPlayer
             playbackId={muxHero}
             streamType="on-demand"
@@ -127,16 +153,18 @@ export function HeroSection() {
             style={{
               position: 'absolute',
               inset: 0,
-              zIndex: 1,
+              zIndex: 2,
               width: '100%',
               height: '100%',
-              opacity: muxReady ? 1 : 0,
-              transition: 'opacity 0.55s ease-out',
+              /* opacity:0 on video still composites black on some iOS builds — hide until ready */
+              visibility: muxReady ? 'visible' : 'hidden',
+              pointerEvents: 'none',
               ...({'--media-object-fit': 'cover'} as React.CSSProperties),
             }}
             aria-hidden="true"
           />
-        ) : (
+        ) : null}
+        {!muxHero ? (
           <video
             autoPlay
             muted
@@ -145,7 +173,7 @@ export function HeroSection() {
             style={{
               position: 'absolute',
               inset: 0,
-              zIndex: 1,
+              zIndex: 2,
               width: '100%',
               height: '100%',
               objectFit: 'cover',
@@ -155,12 +183,12 @@ export function HeroSection() {
           >
             <source src="/video/placeholders/hero-loop.mp4" type="video/mp4" />
           </video>
-        )}
+        ) : null}
         <div
           style={{
             position: 'absolute',
             inset: 0,
-            zIndex: 2,
+            zIndex: 3,
             background:
               'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.4) 100%)',
           }}

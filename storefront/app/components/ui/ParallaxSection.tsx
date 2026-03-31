@@ -25,6 +25,8 @@ interface ParallaxSectionProps {
   ariaLabel?: string;
   /** For header nav contrast (IntersectionObserver on homepage) */
   headerTheme?: 'dark' | 'light';
+  /** Anchor id for in-page / hash links */
+  id?: string;
 }
 
 export function ParallaxSection({
@@ -37,6 +39,7 @@ export function ParallaxSection({
   className = '',
   ariaLabel,
   headerTheme = 'dark',
+  id,
 }: ParallaxSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
@@ -97,6 +100,7 @@ export function ParallaxSection({
   return (
     <section
       ref={sectionRef}
+      id={id}
       className={`parallax-section ${className}`}
       aria-label={ariaLabel}
       data-header-theme={headerTheme}

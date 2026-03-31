@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect} from 'react';
 import {Link, useLocation, useRouteLoaderData} from 'react-router';
 import {useOptimisticCart} from '@shopify/hydrogen';
 import type {CartApiQueryFragment} from 'storefrontapi.generated';
@@ -53,10 +53,8 @@ function HeaderCartTrigger({
  */
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isOverDark, setIsOverDark] = useState(true);
-  const lastScrollY = useRef(0);
   const location = useLocation();
 
   useEffect(() => {
@@ -65,10 +63,7 @@ export function Header() {
 
   useEffect(() => {
     const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 60);
-      setHidden(y > lastScrollY.current && y > 200);
-      lastScrollY.current = y;
+      setScrolled(window.scrollY > 60);
     };
     window.addEventListener('scroll', onScroll, {passive: true});
     onScroll();
@@ -119,9 +114,9 @@ export function Header() {
   return (
     <>
       <header
-        className={`site-header transition-transform duration-500 ${
+        className={`site-header transition-[background,backdrop-filter,border-color] duration-500 ${
           scrolled ? 'scrolled' : ''
-        } ${hidden ? '-translate-y-full' : 'translate-y-0'}`}
+        }`}
       >
         <Link
           to="/"
@@ -141,7 +136,7 @@ export function Header() {
               transition: 'color 0.4s',
             }}
           >
-            The Silk Blouse
+            Timeless womenswear
           </span>
         </Link>
 

@@ -52,7 +52,7 @@ export function ProductTeaser() {
       <div style={{position: 'absolute', inset: 0}}>
         <img
           src={PLACEHOLDER_IMAGES.productTeaser}
-          alt="Emi Woo Silk Blouse"
+          alt="Emi Woo silk blouse"
           width={1600}
           height={1200}
           style={{width: '100%', height: '100%', objectFit: 'cover'}}
@@ -120,7 +120,7 @@ export function ProductTeaser() {
             letterSpacing: '0.04em',
           }}
         >
-          One style. Every occasion.
+          Where the collection begins — more pieces to follow.
         </p>
 
         <div style={{marginTop: '8px'}}>

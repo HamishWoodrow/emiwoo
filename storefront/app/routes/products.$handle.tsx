@@ -295,6 +295,7 @@ export default function ProductPage() {
           3. Material & Craft
       ================================ */}
       <section
+        id="material-craft"
         style={{
           background: 'var(--color-surface)',
           padding: 'clamp(80px, 10vw, 140px) var(--container-pad)',

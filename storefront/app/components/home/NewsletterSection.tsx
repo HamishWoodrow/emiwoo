@@ -131,10 +131,11 @@ export function NewsletterSection() {
             onSubmit={handleSubmit}
             style={{
               display: 'flex',
-              gap: '0',
+              flexWrap: 'wrap',
+              gap: '12px',
               width: '100%',
-              maxWidth: '480px',
-              borderBottom: '1px solid var(--color-border)',
+              maxWidth: '520px',
+              alignItems: 'stretch',
             }}
           >
             <input
@@ -144,23 +145,18 @@ export function NewsletterSection() {
               placeholder="Your email address"
               required
               className="newsletter-input"
-              style={{flex: 1, paddingRight: '16px'}}
+              style={{flex: '1 1 220px', minWidth: 0}}
             />
             <button
               type="submit"
+              className="btn-cta"
               style={{
-                background: 'none',
-                border: 'none',
+                flex: '0 0 auto',
                 cursor: 'pointer',
-                padding: '12px 0 12px 16px',
-                fontFamily: 'var(--font-body)',
-                fontSize: '9px',
-                fontWeight: 400,
-                letterSpacing: '0.24em',
-                textTransform: 'uppercase',
-                color: 'var(--color-accent)',
-                whiteSpace: 'nowrap',
-                transition: 'opacity 0.3s',
+                padding: '16px 28px',
+                fontSize: '10px',
+                letterSpacing: '0.22em',
+                alignSelf: 'stretch',
               }}
             >
               Subscribe

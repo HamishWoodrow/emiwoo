@@ -56,8 +56,8 @@ export function Footer() {
                 color: 'var(--color-text-secondary)',
               }}
             >
-              A single blouse, designed without compromise. Crafted in the
-              finest silk for the woman who needs nothing more.
+              Beautiful pieces, made with intention — starting with silk,
+              with more to come. For those who prefer fewer, better things.
             </p>
           </div>
 

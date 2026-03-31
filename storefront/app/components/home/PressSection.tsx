@@ -56,8 +56,10 @@ export function PressSection() {
       ref={sectionRef}
       data-header-theme="light"
       style={{
-        background: 'var(--color-surface)',
+        background: 'var(--color-bg)',
         padding: 'clamp(56px, 7vw, 96px) var(--container-pad)',
+        borderTop: '1px solid var(--color-border)',
+        borderBottom: '1px solid var(--color-border)',
       }}
     >
       <div className="container">
@@ -65,30 +67,32 @@ export function PressSection() {
         <div
           style={{
             textAlign: 'center',
-            marginBottom: '40px',
+            marginBottom: '48px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '16px',
+            gap: '20px',
           }}
         >
-          <span
+          <h2
             style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '9px',
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(22px, 3.2vw, 36px)',
               fontWeight: 400,
-              letterSpacing: '0.3em',
+              letterSpacing: '0.12em',
               textTransform: 'uppercase',
-              color: 'var(--color-accent)',
+              color: 'var(--color-text-primary)',
+              margin: 0,
             }}
           >
             As seen in
-          </span>
+          </h2>
           <div
             style={{
-              width: '1px',
-              height: '40px',
-              background: 'var(--color-border)',
+              width: '48px',
+              height: '1px',
+              background: 'var(--color-cta)',
+              opacity: 0.45,
             }}
           />
         </div>
@@ -109,6 +113,7 @@ export function PressSection() {
               className="press-card"
               style={{
                 background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
                 padding: 'clamp(32px, 4vw, 48px)',
                 display: 'flex',
                 flexDirection: 'column',
@@ -123,7 +128,7 @@ export function PressSection() {
                   fontWeight: 400,
                   fontStyle: 'italic',
                   letterSpacing: '0.04em',
-                  color: 'var(--color-accent)',
+                  color: 'var(--color-text-primary)',
                 }}
               >
                 {outlet}
